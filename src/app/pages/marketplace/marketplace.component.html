@@ -1,0 +1,105 @@
+<div class="marketplace-page container">
+  <!-- Header -->
+  <div class="market-header">
+    <div class="flex items-center justify-between header-row">
+      <div>
+        <span class="badge badge-emerald">Campus Bookstore & Materials</span>
+        <h1 class="page-title">Digital PDFs, Practice Manuals & Audio Banks</h1>
+        <p class="page-desc">Official curriculum materials, Cambridge authentic test banks, and targeted lexical flashcard guides.</p>
+      </div>
+
+      <!-- Cart Drawer Trigger Button -->
+      <button class="btn btn-primary" (click)="showCartDrawer = true">
+        <i class="fa-solid fa-bag-shopping"></i> Study Basket ({{ marketplaceService.cartCount() }})
+      </button>
+    </div>
+  </div>
+
+  <!-- Materials Grid -->
+  <div class="grid grid-cols-3 materials-grid">
+    <div *ngFor="let item of materials()" class="material-card card card-hoverable">
+      <div class="mat-cover">
+        <img [src]="item.coverImageUrl" [alt]="item.title" class="cover-img">
+        <span class="type-pill" [class.digital]="item.materialType === 'DIGITAL_PDF'" [class.book]="item.materialType === 'PHYSICAL_BOOK'">
+          {{ item.materialType === 'DIGITAL_PDF' ? 'DIGITAL PDF' : item.materialType === 'AUDIO_BANK' ? 'AUDIO BANK' : 'PAPERBACK' }}
+        </span>
+      </div>
+
+      <div class="mat-body">
+        <span class="category-tag">{{ item.category }}</span>
+        <h3 class="mat-title">{{ item.title }}</h3>
+        <p class="mat-desc">{{ item.description }}</p>
+
+        <div class="mat-footer">
+          <span class="mat-price">\${{ item.price }}</span>
+          <button class="btn btn-primary btn-sm" (click)="addToCart(item)">
+            <i class="fa-solid fa-cart-plus"></i> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Slide-Over Drawer -->
+  <div class="cart-drawer-backdrop" *ngIf="showCartDrawer" (click)="showCartDrawer = false">
+    <div class="cart-drawer" (click)="$event.stopPropagation()">
+      <div class="drawer-header">
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-bag-shopping text-emerald"></i>
+          <h3>Study Basket</h3>
+        </div>
+        <button class="close-btn" (click)="showCartDrawer = false"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="drawer-body">
+        <div *ngIf="marketplaceService.cartItems().length > 0; else emptyCart">
+          <div *ngFor="let item of marketplaceService.cartItems()" class="cart-item-row">
+            <div class="item-info">
+              <span class="item-type-badge">{{ item.itemType }}</span>
+              <h4 class="item-title">{{ item.itemTitle }}</h4>
+              <span class="item-price">\${{ item.price }}</span>
+            </div>
+            <button class="remove-btn" (click)="marketplaceService.removeFromCart(item.itemType, item.referenceId)">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        </div>
+
+        <ng-template #emptyCart>
+          <div class="empty-cart text-center">
+            <i class="fa-solid fa-basket-shopping empty-icon"></i>
+            <h4>Your Basket is Empty</h4>
+            <p>Select practice manuals, course masterclasses, or audio banks above.</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="drawer-footer" *ngIf="marketplaceService.cartItems().length > 0">
+        <!-- Promo Code Input -->
+        <div class="promo-box">
+          <input type="text" [(ngModel)]="promoCode" placeholder="Promo code (try HIVE20)" class="form-input promo-input">
+          <button class="btn btn-secondary btn-sm" (click)="applyPromo()">Apply</button>
+        </div>
+        <span class="promo-hint" *ngIf="appliedDiscount > 0">20% Institutional Promo Applied!</span>
+
+        <div class="total-row">
+          <span>Subtotal:</span>
+          <strong>\${{ marketplaceService.cartSubtotal() | number:'1.2-2' }}</strong>
+        </div>
+        <div class="total-row discount" *ngIf="appliedDiscount > 0">
+          <span>Discount:</span>
+          <strong>-\${{ appliedDiscount | number:'1.2-2' }}</strong>
+        </div>
+        <div class="total-row grand-total">
+          <span>Total:</span>
+          <strong>\${{ finalTotal | number:'1.2-2' }}</strong>
+        </div>
+
+        <button class="btn btn-primary btn-block btn-lg" (click)="proceedCheckout()" [disabled]="checkoutLoading">
+          <i *ngIf="checkoutLoading" class="fa-solid fa-spinner fa-spin"></i>
+          <span *ngIf="!checkoutLoading">Checkout & Unlock Instant Access</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

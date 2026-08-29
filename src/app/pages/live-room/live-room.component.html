@@ -1,0 +1,156 @@
+<div class="live-room-page container">
+  <!-- Live Room Header Bar -->
+  <div class="room-topbar card card-glass">
+    <div class="topbar-left">
+      <div class="live-indicator">
+        <span class="live-pulse"></span>
+        <strong>LIVE EXAM SESSION</strong>
+      </div>
+      <span class="exam-title">IELTS Academic Speaking Mock (Room #{{ bookingId() }})</span>
+    </div>
+
+    <!-- Central Speech Countdown Timer -->
+    <div class="timer-box">
+      <i class="fa-solid fa-stopwatch text-emerald"></i>
+      <span class="timer-digits">{{ formattedTimer() }}</span>
+      <span class="part-indicator">{{ currentPart() }}</span>
+    </div>
+
+    <div class="topbar-right">
+      <button class="btn btn-danger btn-sm" (click)="endSession()">
+        <i class="fa-solid fa-phone-slash"></i> Leave Room
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Video Simulation & Prompt Split Layout -->
+  <div class="room-layout">
+    <!-- Left: Video Feeds Grid -->
+    <div class="video-grid-col">
+      <div class="video-conference-grid">
+        <!-- Examiner Feed (Dr. Arthur Pendelton) -->
+        <div class="video-tile examiner-tile">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600" alt="Examiner Feed" class="feed-img">
+          <div class="tile-tag">
+            <i class="fa-solid fa-chalkboard-user text-emerald"></i>
+            <span>Dr. Arthur Pendelton (Examiner Lead)</span>
+          </div>
+          <div class="audio-wave-bars">
+            <span class="wave-bar animate"></span>
+            <span class="wave-bar animate"></span>
+            <span class="wave-bar animate"></span>
+          </div>
+        </div>
+
+        <!-- Candidate Feed (Student) -->
+        <div class="video-tile candidate-tile">
+          <img [src]="authService.currentUser()?.avatarUrl || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600'" alt="Candidate Feed" class="feed-img">
+          <div class="tile-tag">
+            <i class="fa-solid fa-user-graduate"></i>
+            <span>{{ authService.currentUser()?.fullName || 'Sarah Jenkins (Candidate)' }}</span>
+          </div>
+          <!-- Floating Student Watermark in Video Feed -->
+          <div class="tile-watermark">
+            {{ authService.currentUser()?.email }} • STU-{{ authService.currentUser()?.id || '1' }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Video Controls Toolbar -->
+      <div class="conference-toolbar card">
+        <div class="tool-buttons">
+          <button class="tool-btn" [class.muted]="isMicMuted" (click)="isMicMuted = !isMicMuted">
+            <i class="fa-solid" [ngClass]="isMicMuted ? 'fa-microphone-slash text-danger' : 'fa-microphone'"></i>
+          </button>
+          <button class="tool-btn" [class.muted]="isCamMuted" (click)="isCamMuted = !isCamMuted">
+            <i class="fa-solid" [ngClass]="isCamMuted ? 'fa-video-slash text-danger' : 'fa-video'"></i>
+          </button>
+          <button class="tool-btn active" title="Audio Noise Suppression Active">
+            <i class="fa-solid fa-wand-magic-sparkles text-emerald"></i>
+          </button>
+        </div>
+        <div class="stage-navigation">
+          <button class="btn btn-secondary btn-sm" (click)="setPart('Part 1: Introduction & Everyday Topics')">Part 1</button>
+          <button class="btn btn-secondary btn-sm" (click)="setPart('Part 2: Individual Long Turn (Cue Card)')">Part 2 (2-Min)</button>
+          <button class="btn btn-secondary btn-sm" (click)="setPart('Part 3: Two-Way Abstract Discussion')">Part 3 (Discussion)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Official Cue Card Prompts & Examiner Rubric Scoring Pad -->
+    <div class="rubric-col">
+      <!-- Examiner Cue Card -->
+      <div class="cue-card card">
+        <div class="cue-header">
+          <span class="badge badge-emerald">Candidate Topic Cue Card</span>
+          <span class="time-tip">1 Min Prep / 2 Min Speaking</span>
+        </div>
+        <h4 class="cue-topic">Describe an unexpected challenge you faced and successfully overcame.</h4>
+        <ul class="cue-prompts">
+          <li>What the challenge was and why it arose</li>
+          <li>How you decided to handle the situation</li>
+          <li>What obstacles you encountered along the way</li>
+          <li>And explain what you learned about your own resilience</li>
+        </ul>
+      </div>
+
+      <!-- Live Examiner Scoring Pad -->
+      <div class="scoring-pad card card-glass">
+        <div class="scoring-header">
+          <h4 class="scoring-title"><i class="fa-solid fa-pen-ruler text-emerald"></i> Examiner Live Rubric Scoring</h4>
+          <span class="badge badge-blue">Official 4 Criteria</span>
+        </div>
+
+        <div class="score-sliders">
+          <div class="score-field">
+            <div class="score-label-row">
+              <span>Fluency & Coherence</span>
+              <strong class="text-emerald">{{ fluencyScore }}</strong>
+            </div>
+            <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="fluencyScore" class="form-range">
+          </div>
+
+          <div class="score-field">
+            <div class="score-label-row">
+              <span>Lexical Resource</span>
+              <strong class="text-emerald">{{ lexicalScore }}</strong>
+            </div>
+            <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="lexicalScore" class="form-range">
+          </div>
+
+          <div class="score-field">
+            <div class="score-label-row">
+              <span>Grammatical Range</span>
+              <strong class="text-emerald">{{ grammarScore }}</strong>
+            </div>
+            <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="grammarScore" class="form-range">
+          </div>
+
+          <div class="score-field">
+            <div class="score-label-row">
+              <span>Pronunciation & Intonation</span>
+              <strong class="text-emerald">{{ pronunciationScore }}</strong>
+            </div>
+            <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="pronunciationScore" class="form-range">
+          </div>
+
+          <div class="form-group mb-2">
+            <label class="form-label" style="font-size: 0.78rem;">Examiner Detailed Performance Assessment</label>
+            <textarea 
+              [(ngModel)]="detailedFeedback" 
+              rows="3" 
+              class="form-textarea" 
+              style="font-size: 0.8rem;"
+              placeholder="Summarize fluency pauses, idiomatic collocations used, grammatical accuracy, and pronunciation clarity...">
+            </textarea>
+          </div>
+
+          <button class="btn btn-primary btn-block" (click)="submitEvaluation()" [disabled]="submitLoading">
+            <i *ngIf="submitLoading" class="fa-solid fa-spinner fa-spin"></i>
+            <span *ngIf="!submitLoading"><i class="fa-solid fa-stamp"></i> Complete Exam & Issue Scorecard</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

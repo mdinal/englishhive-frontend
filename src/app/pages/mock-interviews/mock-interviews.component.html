@@ -1,0 +1,144 @@
+<div class="mock-page container">
+  <!-- Header -->
+  <div class="page-header">
+    <span class="badge badge-emerald">Certified Examiner Engine</span>
+    <h1 class="page-title">Live 1-on-1 Mock Speaking Evaluations</h1>
+    <p class="page-desc">
+      Replicate high-stakes IELTS, PTE, and Workplace interview conditions. Receive real-time assessment across the 4 official assessment rubrics, personalized corrective drills, and an authenticated score certificate.
+    </p>
+  </div>
+
+  <!-- Main Layout Grid -->
+  <div class="booking-layout">
+    <!-- Left: Available Examiner Slots -->
+    <div class="slots-col">
+      <div class="slots-header card">
+        <div class="flex items-center justify-between">
+          <h3 class="card-title">Available Interview Slots</h3>
+          <span class="badge badge-blue">{{ slots().length }} Slots Available</span>
+        </div>
+        <p class="slots-note">Automated meeting links generated instantly upon reservation. Concurrency locked.</p>
+      </div>
+
+      <div class="slots-grid" *ngIf="slots().length > 0; else noSlots">
+        <div *ngFor="let slot of slots()" class="slot-card card card-hoverable">
+          <div class="slot-top">
+            <div class="examiner-chip">
+              <i class="fa-solid fa-user-tie text-emerald"></i>
+              <span>{{ slot.instructorName }}</span>
+            </div>
+            <span class="badge" [class.badge-emerald]="slot.examType.includes('IELTS')" [class.badge-blue]="slot.examType.includes('PTE')">
+              {{ slot.examType }}
+            </span>
+          </div>
+
+          <div class="slot-time-block">
+            <div class="time-item">
+              <i class="fa-regular fa-calendar text-emerald"></i>
+              <span class="time-text">{{ slot.startTime | date:'EEEE, MMM d, y' }}</span>
+            </div>
+            <div class="time-item">
+              <i class="fa-regular fa-clock text-emerald"></i>
+              <span class="time-text">{{ slot.startTime | date:'shortTime' }} - {{ slot.endTime | date:'shortTime' }} (45 mins)</span>
+            </div>
+          </div>
+
+          <div class="slot-actions">
+            <button class="btn btn-primary btn-block" (click)="openBookingModal(slot)">
+              <i class="fa-solid fa-calendar-check"></i> Book Interview Slot
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noSlots>
+        <div class="empty-state card text-center">
+          <i class="fa-solid fa-calendar-xmark empty-icon"></i>
+          <h3>All Slots Currently Reserved</h3>
+          <p>Certified examiners release new time slots daily. Check back in a few hours.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Right: Certified Examiner Profile Spotlight -->
+    <div class="examiner-col">
+      <div class="examiner-card card">
+        <div class="examiner-header text-center">
+          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200" alt="Examiner" class="examiner-avatar">
+          <h3 class="examiner-name">Dr. Arthur Pendelton</h3>
+          <span class="examiner-role">Senior Certified Examiner Lead</span>
+          <div class="examiner-creds">
+            <span class="cred-pill"><i class="fa-solid fa-certificate"></i> British Council Certified</span>
+            <span class="cred-pill"><i class="fa-solid fa-clock-rotate-left"></i> 14+ Years Experience</span>
+          </div>
+        </div>
+
+        <div class="examiner-bio">
+          <p>
+            "In my 14 years evaluating IELTS Speaking candidates, the difference between Band 6.5 and Band 8.0 isn't vocabulary memorization — it's spontaneous discourse coherence and idiomatic precision under pressure."
+          </p>
+        </div>
+
+        <div class="rubric-preview-box">
+          <h4 class="box-title"><i class="fa-solid fa-list-check text-emerald"></i> Official Evaluation Rubrics</h4>
+          <ul class="rubric-list">
+            <li><i class="fa-solid fa-check text-emerald"></i> Fluency & Coherence (Pacing & Fillers)</li>
+            <li><i class="fa-solid fa-check text-emerald"></i> Lexical Resource (Collocations & Idioms)</li>
+            <li><i class="fa-solid fa-check text-emerald"></i> Grammatical Range & Complex Syntax</li>
+            <li><i class="fa-solid fa-check text-emerald"></i> Phonological Stress & Intonation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Confirmation Modal -->
+  <div class="modal-backdrop" *ngIf="selectedSlot">
+    <div class="modal-card card card-glass">
+      <div class="modal-header">
+        <h3 class="modal-title">Confirm Mock Interview Reservation</h3>
+        <button class="modal-close" (click)="selectedSlot = null"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body" *ngIf="selectedSlot">
+        <div class="modal-summary-box">
+          <div class="summary-row">
+            <span class="label">Examiner:</span>
+            <span class="val">{{ selectedSlot.instructorName }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Date & Time:</span>
+            <span class="val">{{ selectedSlot.startTime | date:'medium' }}</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Exam Track:</span>
+            <span class="val badge badge-emerald">{{ selectedSlot.examType }}</span>
+          </div>
+        </div>
+
+        <div class="form-group mt-3">
+          <label class="form-label">Candidate Preparation Notes (Optional)</label>
+          <textarea 
+            [(ngModel)]="candidateNotes" 
+            placeholder="Mention specific areas you want the examiner to grill you on (e.g. Part 3 abstract questions, hesitation reduction, accent clarity)..."
+            class="form-textarea" 
+            rows="3">
+          </textarea>
+        </div>
+
+        <div class="modal-notice">
+          <i class="fa-solid fa-circle-info text-blue"></i>
+          <span>Your secure room meeting URL will be generated instantly and locked against double-booking.</span>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="selectedSlot = null">Cancel</button>
+        <button class="btn btn-primary" (click)="confirmBooking()" [disabled]="bookingLoading">
+          <i *ngIf="bookingLoading" class="fa-solid fa-spinner fa-spin"></i>
+          <span *ngIf="!bookingLoading">Confirm & Generate Room URL</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,80 @@
+<div class="player-page container" *ngIf="course()">
+  <!-- Top Breadcrumb Navigation -->
+  <div class="player-topbar">
+    <a routerLink="/courses" class="back-link">
+      <i class="fa-solid fa-arrow-left"></i> Back to Catalog
+    </a>
+    <div class="topbar-info">
+      <span class="badge badge-emerald">{{ course()?.category }}</span>
+      <span class="course-main-title">{{ course()?.title }}</span>
+    </div>
+  </div>
+
+  <!-- Main Player Layout Grid -->
+  <div class="player-layout">
+    <!-- Left Column: Protected Video Player & Notes -->
+    <div class="video-main-col">
+      <app-protected-video-player
+        [videoUrl]="activeLesson()?.videoHlsUrl || course()?.previewVideoUrl || ''"
+        [lessonTitle]="activeLesson()?.lessonTitle || course()?.title || ''">
+      </app-protected-video-player>
+
+      <!-- Current Lesson Info & Worksheets -->
+      <div class="lesson-meta-box card">
+        <div class="meta-header">
+          <div>
+            <span class="module-tag">{{ activeLesson()?.moduleTitle }}</span>
+            <h2 class="lesson-name">{{ activeLesson()?.lessonTitle }}</h2>
+          </div>
+          <button class="btn btn-outline btn-sm" (click)="downloadWorksheet()">
+            <i class="fa-solid fa-file-arrow-down"></i> Download Worksheet
+          </button>
+        </div>
+
+        <p class="lesson-summary-text">{{ activeLesson()?.summary }}</p>
+
+        <!-- Tabs: Lesson Notes & Key Vocabulary -->
+        <div class="notes-tab-wrapper">
+          <div class="tab-header">
+            <span class="tab-label active"><i class="fa-solid fa-pen-to-square"></i> Student Active Notepad</span>
+          </div>
+          <textarea 
+            [(ngModel)]="studentNotes" 
+            placeholder="Type your notes, vocabulary collocations, or speaking practice thoughts here... (saved automatically in browser)"
+            (ngModelChange)="saveNotes()"
+            class="form-textarea notes-area"
+            rows="4">
+          </textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Interactive Curriculum Chapter Playlist -->
+    <div class="curriculum-col">
+      <div class="curriculum-card card">
+        <div class="curriculum-header">
+          <h3 class="curriculum-title">Course Curriculum</h3>
+          <span class="curriculum-count">{{ course()?.lessons?.length || 0 }} Lessons</span>
+        </div>
+
+        <div class="lesson-list">
+          <button 
+            *ngFor="let lesson of course()?.lessons; let idx = index" 
+            class="lesson-item-btn" 
+            [class.active]="lesson.id === activeLesson()?.id"
+            (click)="selectLesson(lesson)">
+            <div class="lesson-status-icon">
+              <i *ngIf="lesson.id === activeLesson()?.id" class="fa-solid fa-circle-play text-emerald"></i>
+              <i *ngIf="lesson.id !== activeLesson()?.id" class="fa-regular fa-circle"></i>
+            </div>
+            <div class="lesson-info">
+              <span class="lesson-order">Lesson {{ idx + 1 }}</span>
+              <span class="lesson-title-text">{{ lesson.lessonTitle }}</span>
+            </div>
+            <span class="lesson-duration">{{ lesson.durationMinutes }}m</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

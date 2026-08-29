@@ -1,0 +1,67 @@
+<div class="auth-page container">
+  <div class="auth-card card card-glass">
+    <div class="auth-header text-center">
+      <div class="auth-badge">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2 class="auth-title">Candidate & Faculty Portal</h2>
+      <p class="auth-subtitle">Sign in to access your courses, mock interview schedule, and scorecards.</p>
+    </div>
+
+    <!-- 1-Click Quick Demo Logins Matrix -->
+    <div class="demo-box">
+      <span class="demo-title"><i class="fa-solid fa-bolt text-amber"></i> Quick 1-Click Demo Profiles</span>
+      <div class="demo-grid">
+        <button class="demo-btn student" (click)="authService.loginAsStudent()">
+          <div class="role-dot"></div>
+          <div class="demo-info">
+            <strong>Sarah Jenkins</strong>
+            <span>Candidate (Band 8.0)</span>
+          </div>
+        </button>
+
+        <button class="demo-btn instructor" (click)="authService.loginAsInstructor()">
+          <div class="role-dot"></div>
+          <div class="demo-info">
+            <strong>Dr. Arthur Pendelton</strong>
+            <span>Certified Examiner</span>
+          </div>
+        </button>
+
+        <button class="demo-btn admin" (click)="authService.loginAsAdmin()">
+          <div class="role-dot"></div>
+          <div class="demo-info">
+            <strong>Campus Lead</strong>
+            <span>Platform Admin</span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="divider">
+      <span>or sign in with email</span>
+    </div>
+
+    <!-- Login Form -->
+    <form (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" [(ngModel)]="email" name="email" required placeholder="name@domain.com" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" [(ngModel)]="password" name="password" required placeholder="••••••••" class="form-input">
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" [disabled]="loading">
+        <i *ngIf="loading" class="fa-solid fa-spinner fa-spin"></i>
+        <span *ngIf="!loading">Authenticate & Enter Campus</span>
+      </button>
+    </form>
+
+    <div class="auth-footer text-center">
+      <p>Don't have an academy account? <a routerLink="/register" class="text-emerald">Register Candidate Profile</a></p>
+    </div>
+  </div>
+</div>

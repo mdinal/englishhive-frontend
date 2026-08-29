@@ -1,0 +1,125 @@
+<div class="dashboard-page container">
+  <!-- Instructor Banner -->
+  <div class="profile-banner card card-glass">
+    <div class="profile-info-left">
+      <img [src]="authService.currentUser()?.avatarUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120'" alt="Avatar" class="profile-avatar">
+      <div class="profile-details">
+        <span class="badge badge-blue">CERTIFIED EXAMINER FACULTY</span>
+        <h2 class="profile-name">{{ authService.currentUser()?.fullName || 'Dr. Arthur Pendelton' }}</h2>
+        <p class="profile-sub">Faculty Lead • British Council & Pearson Examiner Accreditation</p>
+      </div>
+    </div>
+
+    <div class="profile-actions-right">
+      <button class="btn btn-primary" (click)="showCreateSlotModal = true">
+        <i class="fa-solid fa-calendar-plus"></i> Open New Available Slot
+      </button>
+    </div>
+  </div>
+
+  <!-- Scheduled Candidate Sessions & Pending Gradings -->
+  <div class="dashboard-split-grid">
+    <!-- Left: Scheduled Candidate Interviews -->
+    <div class="scheduled-col">
+      <div class="section-title-row">
+        <h3><i class="fa-solid fa-users text-emerald"></i> Scheduled Candidate Interviews</h3>
+        <span class="badge badge-emerald">{{ scheduledBookings().length }} Active</span>
+      </div>
+
+      <div class="bookings-list" *ngIf="scheduledBookings().length > 0; else noBookings">
+        <div *ngFor="let b of scheduledBookings()" class="booking-card card card-hoverable">
+          <div class="booking-top">
+            <div>
+              <span class="badge badge-emerald">{{ b.examType }}</span>
+              <h4 class="cand-name">{{ b.studentName }}</h4>
+              <span class="cand-email">{{ b.studentEmail }}</span>
+            </div>
+            <div class="time-block">
+              <span class="time-main">{{ b.startTime | date:'shortTime' }}</span>
+              <span class="date-sub">{{ b.startTime | date:'mediumDate' }}</span>
+            </div>
+          </div>
+
+          <p class="notes-quote" *ngIf="b.candidateNotes">
+            <i class="fa-solid fa-quote-left text-muted"></i> {{ b.candidateNotes }}
+          </p>
+
+          <div class="booking-footer">
+            <a [routerLink]="['/live-room']" [queryParams]="{bookingId: b.id}" class="btn btn-primary btn-sm">
+              <i class="fa-solid fa-video"></i> Launch Live Exam Room
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noBookings>
+        <div class="empty-box card text-center">
+          <p>No candidates currently booked for today.</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Right: Examiner Guidelines & Scoring Rubric Cheatsheet -->
+    <div class="guidelines-col">
+      <div class="section-title-row">
+        <h3><i class="fa-solid fa-scale-balanced text-blue"></i> Official Standardized Rubrics</h3>
+      </div>
+
+      <div class="rubric-cheatsheet card">
+        <div class="rubric-rule-item">
+          <h4 class="rule-title text-emerald">Band 8.0 - Fluency & Coherence</h4>
+          <p>Candidate speaks fluently with only rare repetition or self-correction. Topics are developed coherently and appropriately.</p>
+        </div>
+
+        <div class="rubric-rule-item">
+          <h4 class="rule-title text-blue">Band 8.0 - Lexical Resource</h4>
+          <p>Wide vocabulary resource readily and flexibly used to convey precise meaning. Skillful use of uncommon and idiomatic items.</p>
+        </div>
+
+        <div class="rubric-rule-item">
+          <h4 class="rule-title text-purple">Band 8.0 - Grammatical Range</h4>
+          <p>Wide range of structures used flexibly. Majority of sentences are error-free with only very occasional inaccuracies.</p>
+        </div>
+
+        <div class="rubric-rule-item">
+          <h4 class="rule-title text-amber">Band 8.0 - Pronunciation</h4>
+          <p>Uses a wide range of phonological features. Sustains flexible use of features throughout and is easy to understand throughout.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Slot Modal -->
+  <div class="modal-backdrop" *ngIf="showCreateSlotModal">
+    <div class="modal-card card card-glass">
+      <div class="modal-header">
+        <h3 class="modal-title">Open New Examiner Interview Slot</h3>
+        <button class="modal-close" (click)="showCreateSlotModal = false"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Exam Track</label>
+          <select [(ngModel)]="newSlotExamType" class="form-select">
+            <option value="IELTS_ACADEMIC">IELTS Academic Speaking</option>
+            <option value="IELTS_GENERAL">IELTS General Speaking</option>
+            <option value="PTE_ACADEMIC">PTE Academic Speaking</option>
+            <option value="SPOKEN_ENGLISH">Spoken English Diagnostic</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Slot Start Time</label>
+          <input type="datetime-local" [(ngModel)]="newSlotStartTime" class="form-input">
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" (click)="showCreateSlotModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="createSlot()">
+          <i class="fa-solid fa-plus"></i> Publish Available Slot
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

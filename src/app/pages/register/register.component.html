@@ -1,0 +1,54 @@
+<div class="auth-page container">
+  <div class="auth-card card card-glass">
+    <div class="auth-header text-center">
+      <div class="auth-badge">
+        <i class="fa-solid fa-user-plus"></i>
+      </div>
+      <h2 class="auth-title">Candidate Registration</h2>
+      <p class="auth-subtitle">Create your student profile to book certified mock interviews and access masterclasses.</p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" [(ngModel)]="fullName" name="fullName" required placeholder="e.g. Sarah Jenkins" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input type="email" [(ngModel)]="email" name="email" required placeholder="name@domain.com" class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" [(ngModel)]="password" name="password" required placeholder="Minimum 6 characters" class="form-input">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Primary Goal</label>
+          <select [(ngModel)]="targetExam" name="targetExam" class="form-select">
+            <option value="IELTS_ACADEMIC">IELTS Academic</option>
+            <option value="IELTS_GENERAL">IELTS General</option>
+            <option value="PTE_ACADEMIC">PTE Academic</option>
+            <option value="SPOKEN_ENGLISH">Spoken English</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Target Band / Score</label>
+          <input type="text" [(ngModel)]="targetScore" name="targetScore" placeholder="e.g. Band 8.0" class="form-input">
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" [disabled]="loading">
+        <i *ngIf="loading" class="fa-solid fa-spinner fa-spin"></i>
+        <span *ngIf="!loading">Complete Candidate Enrollment</span>
+      </button>
+    </form>
+
+    <div class="auth-footer text-center">
+      <p>Already enrolled? <a routerLink="/login" class="text-emerald">Sign In to Dashboard</a></p>
+    </div>
+  </div>
+</div>

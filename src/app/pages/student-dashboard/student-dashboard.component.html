@@ -1,0 +1,136 @@
+<div class="dashboard-page container">
+  <!-- Top Profile Welcome Banner -->
+  <div class="profile-banner card card-glass">
+    <div class="profile-info-left">
+      <img [src]="authService.currentUser()?.avatarUrl || 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120'" alt="Avatar" class="profile-avatar">
+      <div class="profile-details">
+        <div class="badge badge-emerald">{{ authService.currentUser()?.targetExam || 'IELTS ACADEMIC' }}</div>
+        <h2 class="profile-name">Welcome back, {{ authService.currentUser()?.fullName }}</h2>
+        <p class="profile-sub">Target Score: <strong>{{ authService.currentUser()?.targetScore || 'Band 8.0' }}</strong> • Student ID: <code>STU-{{ authService.currentUser()?.id }}</code></p>
+      </div>
+    </div>
+
+    <div class="profile-actions-right">
+      <a routerLink="/mock-interviews" class="btn btn-primary">
+        <i class="fa-solid fa-calendar-plus"></i> Book Speaking Mock
+      </a>
+      <a routerLink="/courses" class="btn btn-secondary">
+        <i class="fa-solid fa-play"></i> Browse Video Hub
+      </a>
+    </div>
+  </div>
+
+  <!-- Dashboard 3-Column Metrics Grid -->
+  <div class="metrics-grid grid grid-cols-3">
+    <!-- Stat 1: Latest Overall Score -->
+    <div class="metric-card card">
+      <div class="metric-top">
+        <span class="metric-label">Latest Assessed Score</span>
+        <i class="fa-solid fa-award text-emerald"></i>
+      </div>
+      <div class="metric-value">Band 8.0</div>
+      <span class="metric-note text-emerald"><i class="fa-solid fa-arrow-trend-up"></i> +0.5 from initial diagnostic</span>
+    </div>
+
+    <!-- Stat 2: Active Enrolled Courses -->
+    <div class="metric-card card">
+      <div class="metric-top">
+        <span class="metric-label">Enrolled Masterclasses</span>
+        <i class="fa-solid fa-graduation-cap text-blue"></i>
+      </div>
+      <div class="metric-value">2 Courses</div>
+      <span class="metric-note">8/16 Lessons Completed</span>
+    </div>
+
+    <!-- Stat 3: Scheduled Mock Interviews -->
+    <div class="metric-card card">
+      <div class="metric-top">
+        <span class="metric-label">Upcoming Live Mocks</span>
+        <i class="fa-solid fa-video text-purple"></i>
+      </div>
+      <div class="metric-value">{{ upcomingBookings().length }} Active</div>
+      <span class="metric-note">Next: Today at 03:00 PM UTC</span>
+    </div>
+  </div>
+
+  <!-- Main Sections: Upcoming Interviews & Scorecards -->
+  <div class="dashboard-split-grid">
+    <!-- Left: Upcoming Mock Interviews -->
+    <div class="upcoming-col">
+      <div class="section-title-row">
+        <h3><i class="fa-solid fa-calendar-days text-emerald"></i> Upcoming 1-on-1 Speaking Mocks</h3>
+        <a routerLink="/mock-interviews" class="btn btn-outline btn-sm">Schedule More</a>
+      </div>
+
+      <div class="bookings-list" *ngIf="upcomingBookings().length > 0; else noBookings">
+        <div *ngFor="let booking of upcomingBookings()" class="booking-item card card-hoverable">
+          <div class="booking-main">
+            <div class="booking-top">
+              <span class="badge badge-emerald">{{ booking.examType }}</span>
+              <span class="booking-time">{{ booking.startTime | date:'medium' }}</span>
+            </div>
+            <h4 class="booking-instructor"><i class="fa-solid fa-user-tie text-emerald"></i> {{ booking.instructorName }}</h4>
+            <p class="candidate-notes" *ngIf="booking.candidateNotes">"{{ booking.candidateNotes }}"</p>
+          </div>
+
+          <div class="booking-action">
+            <a [routerLink]="['/live-room']" [queryParams]="{bookingId: booking.id}" class="btn btn-primary btn-sm">
+              <i class="fa-solid fa-video"></i> Enter Live Room
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noBookings>
+        <div class="empty-box card text-center">
+          <p>No upcoming mock interviews scheduled.</p>
+          <a routerLink="/mock-interviews" class="btn btn-primary btn-sm mt-2">Book Examiner Session</a>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Right: Verified Official Scorecards & Reports -->
+    <div class="scorecards-col">
+      <div class="section-title-row">
+        <h3><i class="fa-solid fa-certificate text-emerald"></i> Official Evaluation Scorecards</h3>
+      </div>
+
+      <div class="scorecards-list" *ngIf="evaluations().length > 0; else noEvals">
+        <div *ngFor="let eval of evaluations()" class="eval-card card card-hoverable">
+          <div class="eval-top">
+            <div>
+              <span class="badge badge-blue">{{ eval.examType }}</span>
+              <h4 class="eval-examiner">Examiner: {{ eval.instructorName }}</h4>
+              <span class="eval-date">{{ eval.evaluatedAt | date:'mediumDate' }}</span>
+            </div>
+            <div class="eval-band">
+              <span class="band-title">OVERALL</span>
+              <span class="band-score">{{ eval.overallScore }}</span>
+            </div>
+          </div>
+
+          <div class="eval-rubric-mini">
+            <span>Fluency: <strong>{{ eval.fluencyScore }}</strong></span>
+            <span>Lexical: <strong>{{ eval.lexicalScore }}</strong></span>
+            <span>Grammar: <strong>{{ eval.grammarScore }}</strong></span>
+            <span>Pron: <strong>{{ eval.pronunciationScore }}</strong></span>
+          </div>
+
+          <div class="eval-footer">
+            <code class="cert-code">{{ eval.certificateCode }}</code>
+            <a [routerLink]="['/scorecard-report']" [queryParams]="{bookingId: eval.bookingId}" class="btn btn-outline btn-sm">
+              <i class="fa-solid fa-file-lines"></i> View Report
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noEvals>
+        <div class="empty-box card text-center">
+          <p>You haven't completed any mock interviews yet.</p>
+          <a routerLink="/mock-interviews" class="btn btn-primary btn-sm mt-2">Book Your First Evaluation</a>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>

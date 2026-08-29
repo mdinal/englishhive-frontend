@@ -1,0 +1,88 @@
+<div class="courses-page container">
+  <!-- Header Banner -->
+  <div class="courses-header">
+    <span class="badge badge-emerald">Curriculum Catalog</span>
+    <h1 class="page-title">Exam Masterclasses & Video Hub</h1>
+    <p class="page-desc">
+      Structured video curricula engineered to bridge the gap between self-paced instruction and high band score mastery.
+    </p>
+
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+      <button 
+        class="tab-btn" 
+        [class.active]="selectedCategory() === 'ALL'" 
+        (click)="filterCategory('ALL')">
+        All Masterclasses
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="selectedCategory() === 'IELTS'" 
+        (click)="filterCategory('IELTS')">
+        <i class="fa-solid fa-graduation-cap"></i> IELTS Academic & General
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="selectedCategory() === 'PTE'" 
+        (click)="filterCategory('PTE')">
+        <i class="fa-solid fa-bolt"></i> PTE Academic 79+
+      </button>
+      <button 
+        class="tab-btn" 
+        [class.active]="selectedCategory() === 'SPOKEN_ENGLISH'" 
+        (click)="filterCategory('SPOKEN_ENGLISH')">
+        <i class="fa-solid fa-briefcase"></i> Workplace & Speaking
+      </button>
+    </div>
+  </div>
+
+  <!-- Course Grid -->
+  <div class="grid grid-cols-3 course-grid" *ngIf="courses().length > 0; else noCourses">
+    <div *ngFor="let course of courses()" class="course-card card card-hoverable">
+      <div class="course-thumb">
+        <img [src]="course.thumbnailUrl" [alt]="course.title" class="thumb-img">
+        <span class="category-pill">{{ course.category }}</span>
+        <span class="level-pill">{{ course.level }}</span>
+      </div>
+
+      <div class="course-body">
+        <div class="course-meta">
+          <span class="rating"><i class="fa-solid fa-star text-amber"></i> {{ course.rating }} ({{ course.totalReviews }} reviews)</span>
+          <span class="duration"><i class="fa-solid fa-clock"></i> {{ course.totalHours }} hrs</span>
+        </div>
+
+        <h3 class="course-title">{{ course.title }}</h3>
+        <p class="course-desc">{{ course.description | slice:0:120 }}...</p>
+
+        <div class="instructor-row">
+          <div class="inst-icon"><i class="fa-solid fa-chalkboard-user"></i></div>
+          <div class="inst-info">
+            <span class="inst-name">{{ course.instructorName }}</span>
+            <span class="inst-tag">Certified Examiner</span>
+          </div>
+        </div>
+
+        <div class="course-footer">
+          <div class="price-wrap">
+            <span class="price-val">\${{ course.price }}</span>
+            <span class="access-tag">Lifetime Access</span>
+          </div>
+          <div class="btn-group">
+            <a [routerLink]="['/courses', course.slug]" class="btn btn-outline btn-sm">Preview</a>
+            <button class="btn btn-primary btn-sm" (click)="enroll(course)">
+              <i class="fa-solid fa-bag-shopping"></i> Enroll
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noCourses>
+    <div class="empty-state text-center card">
+      <i class="fa-solid fa-book-open empty-icon"></i>
+      <h3>No Masterclasses Available in this Category</h3>
+      <p>Check back shortly as new certified examiner modules are scheduled regularly.</p>
+    </div>
+  </ng-template>
+</div>

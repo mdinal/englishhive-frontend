@@ -1,0 +1,28 @@
+<div class="report-page container">
+  <!-- Top Action Bar -->
+  <div class="report-topbar">
+    <a routerLink="/student-dashboard" class="back-link">
+      <i class="fa-solid fa-arrow-left"></i> Back to Student Dashboard
+    </a>
+    <div class="report-actions">
+      <button class="btn btn-secondary btn-sm" (click)="printReport()">
+        <i class="fa-solid fa-print"></i> Print Official Report
+      </button>
+      <button class="btn btn-primary btn-sm" (click)="shareCertificate()">
+        <i class="fa-solid fa-share-nodes"></i> Share Certificate
+      </button>
+    </div>
+  </div>
+
+  <!-- Scorecard Display -->
+  <div *ngIf="evaluation(); else loadingState">
+    <app-score-card [evaluation]="evaluation()!"></app-score-card>
+  </div>
+
+  <ng-template #loadingState>
+    <div class="loading-box card text-center">
+      <i class="fa-solid fa-spinner fa-spin empty-icon"></i>
+      <h3>Retrieving Official Evaluation Records...</h3>
+    </div>
+  </ng-template>
+</div>
