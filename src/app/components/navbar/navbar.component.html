@@ -1,0 +1,77 @@
+<nav class="navbar-wrapper">
+  <div class="container navbar-container">
+    <!-- Brand Logo & Tenant Name -->
+    <a routerLink="/" class="brand-link">
+      <div class="brand-badge">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">English<span class="brand-highlight">Hive</span></span>
+        <span class="brand-tenant">{{ tenantService.currentTenant().name }}</span>
+      </div>
+    </a>
+
+    <!-- Main Navigation Links -->
+    <div class="nav-links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Home</a>
+      <a routerLink="/courses" routerLinkActive="active" class="nav-link">Courses & Video Hub</a>
+      <a routerLink="/mock-interviews" routerLinkActive="active" class="nav-link">Live Mock Interviews</a>
+      <a routerLink="/marketplace" routerLinkActive="active" class="nav-link">Marketplace & Books</a>
+    </div>
+
+    <!-- Right Side: Tenant Switcher, Cart, Auth -->
+    <div class="nav-actions">
+      <!-- Institutional Tenant Switcher -->
+      <div class="tenant-switcher">
+        <button class="tenant-btn" (click)="toggleTenantDropdown()" title="Switch Partner Institution">
+          <i class="fa-solid fa-building-columns"></i>
+          <span class="tenant-label">{{ tenantService.currentTenant().subdomain | uppercase }}</span>
+          <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;"></i>
+        </button>
+        <div class="tenant-dropdown" *ngIf="showTenantDropdown">
+          <div class="dropdown-header">Select Academy Campus</div>
+          <button 
+            *ngFor="let t of tenantService.tenants()" 
+            class="dropdown-item" 
+            [class.selected]="t.id === tenantService.currentTenant().id"
+            (click)="selectTenant(t)">
+            <div class="dot" [style.background-color]="t.primaryColor"></div>
+            <div class="info">
+              <div class="name">{{ t.name }}</div>
+              <div class="sub">{{ t.tagline }}</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Study Basket Cart Trigger -->
+      <a routerLink="/marketplace" [queryParams]="{viewCart: 'true'}" class="cart-btn" title="View Study Basket">
+        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="cart-badge" *ngIf="marketplaceService.cartCount() > 0">{{ marketplaceService.cartCount() }}</span>
+      </a>
+
+      <!-- User State -->
+      <ng-container *ngIf="authService.isAuthenticated(); else guestActions">
+        <div class="user-menu">
+          <a [routerLink]="dashboardLink" class="user-profile-btn">
+            <img [src]="authService.currentUser()?.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100'" alt="Avatar" class="avatar-img">
+            <span class="user-name">{{ authService.currentUser()?.fullName?.split(' ')?.[0] }}</span>
+            <span class="role-badge" [class.admin]="authService.isAdmin()" [class.instructor]="authService.isInstructor()">
+              {{ authService.isAdmin() ? 'ADMIN' : authService.isInstructor() ? 'EXAMINER' : 'STUDENT' }}
+            </span>
+          </a>
+          <button class="btn btn-ghost btn-sm" (click)="authService.logout()" title="Sign Out">
+            <i class="fa-solid fa-right-from-bracket"></i>
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #guestActions>
+        <div class="guest-buttons">
+          <a routerLink="/login" class="btn btn-ghost btn-sm">Sign In</a>
+          <a routerLink="/register" class="btn btn-primary btn-sm">Get Started</a>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</nav>

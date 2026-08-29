@@ -1,0 +1,89 @@
+<div class="scorecard-wrapper" *ngIf="evaluation">
+  <!-- Card Header -->
+  <div class="scorecard-header">
+    <div class="exam-info">
+      <div class="badge badge-emerald">{{ evaluation.examType }}</div>
+      <h3 class="eval-title">Official Performance Scorecard</h3>
+      <span class="eval-date">Assessed on {{ evaluation.evaluatedAt | date:'mediumDate' }} by {{ evaluation.instructorName }}</span>
+    </div>
+    <div class="overall-badge">
+      <span class="overall-label">{{ isIelts ? 'OVERALL BAND' : 'PTE SCORE' }}</span>
+      <span class="overall-val">{{ evaluation.overallScore }}</span>
+    </div>
+  </div>
+
+  <!-- 4-Criteria Rubric Grid -->
+  <div class="rubric-grid">
+    <!-- Criteria 1: Fluency -->
+    <div class="rubric-item">
+      <div class="rubric-top">
+        <span class="rubric-name">{{ isIelts ? 'Fluency & Coherence' : 'Oral Fluency' }}</span>
+        <span class="rubric-val">{{ evaluation.fluencyScore }}</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width]="getPercent(evaluation.fluencyScore) + '%'"></div>
+      </div>
+    </div>
+
+    <!-- Criteria 2: Lexical Resource -->
+    <div class="rubric-item">
+      <div class="rubric-top">
+        <span class="rubric-name">{{ isIelts ? 'Lexical Resource' : 'Vocabulary' }}</span>
+        <span class="rubric-val">{{ evaluation.lexicalScore }}</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width]="getPercent(evaluation.lexicalScore) + '%'"></div>
+      </div>
+    </div>
+
+    <!-- Criteria 3: Grammar -->
+    <div class="rubric-item">
+      <div class="rubric-top">
+        <span class="rubric-name">{{ isIelts ? 'Grammatical Range' : 'Grammar & Syntax' }}</span>
+        <span class="rubric-val">{{ evaluation.grammarScore }}</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width]="getPercent(evaluation.grammarScore) + '%'"></div>
+      </div>
+    </div>
+
+    <!-- Criteria 4: Pronunciation -->
+    <div class="rubric-item">
+      <div class="rubric-top">
+        <span class="rubric-name">Pronunciation & Stress</span>
+        <span class="rubric-val">{{ evaluation.pronunciationScore }}</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" [style.width]="getPercent(evaluation.pronunciationScore) + '%'"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Sections -->
+  <div class="feedback-section" *ngIf="evaluation.detailedFeedback">
+    <h4 class="section-title"><i class="fa-solid fa-clipboard-check text-emerald"></i> Examiner Detailed Feedback</h4>
+    <p class="feedback-text">{{ evaluation.detailedFeedback }}</p>
+  </div>
+
+  <div class="strengths-grid" *ngIf="evaluation.strengths || evaluation.areasForImprovement">
+    <div class="strengths-box" *ngIf="evaluation.strengths">
+      <h5 class="box-title text-emerald"><i class="fa-solid fa-circle-check"></i> Key Strengths</h5>
+      <p>{{ evaluation.strengths }}</p>
+    </div>
+    <div class="areas-box" *ngIf="evaluation.areasForImprovement">
+      <h5 class="box-title text-amber"><i class="fa-solid fa-arrow-trend-up"></i> Priority Target Areas</h5>
+      <p>{{ evaluation.areasForImprovement }}</p>
+    </div>
+  </div>
+
+  <!-- Footer Certificate Code -->
+  <div class="scorecard-footer">
+    <div class="cert-code">
+      <i class="fa-solid fa-stamp"></i>
+      <span>Verification Code: <strong>{{ evaluation.certificateCode }}</strong></span>
+    </div>
+    <div class="badge badge-blue">
+      <i class="fa-solid fa-circle-check"></i> Authenticated Report
+    </div>
+  </div>
+</div>

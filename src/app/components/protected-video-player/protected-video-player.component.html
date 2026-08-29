@@ -1,0 +1,32 @@
+<div class="video-wrapper" (contextmenu)="preventRightClick($event)">
+  <!-- Hardened Video Element -->
+  <video
+    #videoEl
+    [src]="videoUrl"
+    controls
+    controlsList="nodownload nofullscreen noremoteplayback"
+    disablePictureInPicture
+    playsinline
+    class="video-element"
+    (play)="onPlay()"
+    (pause)="onPause()">
+    Your browser does not support HTML5 encrypted video playback.
+  </video>
+
+  <!-- Dynamic Forensic Student Identity Watermark (Anti-Screen Recording) -->
+  <div 
+    class="forensic-watermark" 
+    [style.top]="watermarkY() + '%'" 
+    [style.left]="watermarkX() + '%'">
+    <div class="watermark-tag">
+      <i class="fa-solid fa-lock" style="font-size: 0.65rem;"></i>
+      <span>{{ userWatermarkText }}</span>
+    </div>
+  </div>
+
+  <!-- Security Overlay Notice -->
+  <div class="security-badge">
+    <i class="fa-solid fa-shield-halved text-emerald"></i>
+    <span>DRM Protected Stream</span>
+  </div>
+</div>

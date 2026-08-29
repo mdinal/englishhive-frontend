@@ -1,0 +1,63 @@
+<footer class="footer-wrapper">
+  <div class="container footer-content">
+    <div class="footer-grid">
+      <!-- Col 1: Brand & Tagline -->
+      <div class="footer-brand">
+        <div class="brand-link">
+          <div class="brand-badge">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <span class="brand-title">English<span class="brand-highlight">Hive</span></span>
+        </div>
+        <p class="brand-desc">
+          {{ tenantService.currentTenant().tagline }}. Structured curriculum tracks, live 1-on-1 certified mock interviews, and verified official band scorecards.
+        </p>
+        <div class="accreditation-badges">
+          <span class="acc-badge"><i class="fa-solid fa-shield-halved"></i> British Council Standards</span>
+          <span class="acc-badge"><i class="fa-solid fa-check-double"></i> Pearson PTE Aligned</span>
+        </div>
+      </div>
+
+      <!-- Col 2: Exam Preparation Tracks -->
+      <div class="footer-col">
+        <h4 class="col-title">Preparation Tracks</h4>
+        <ul class="col-links">
+          <li><a routerLink="/courses" [queryParams]="{category: 'IELTS'}">IELTS Academic & General</a></li>
+          <li><a routerLink="/courses" [queryParams]="{category: 'PTE'}">PTE Academic 79+ Intensive</a></li>
+          <li><a routerLink="/courses" [queryParams]="{category: 'SPOKEN_ENGLISH'}">Executive Workplace English</a></li>
+          <li><a routerLink="/mock-interviews">1-on-1 Speaking Mocks</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Learning Campus -->
+      <div class="footer-col">
+        <h4 class="col-title">Campus & Resources</h4>
+        <ul class="col-links">
+          <li><a routerLink="/marketplace">Practice Manuals & PDFs</a></li>
+          <li><a routerLink="/mock-interviews">Book Examiner Slot</a></li>
+          <li><a routerLink="/login">Candidate Portal</a></li>
+          <li><a routerLink="/admin-dashboard">System Health & SRE</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Institutional Security & Compliance -->
+      <div class="footer-col">
+        <h4 class="col-title">Security & Governance</h4>
+        <div class="security-card">
+          <div class="sec-item"><i class="fa-solid fa-lock text-emerald"></i> AES-128 Stream Encryption</div>
+          <div class="sec-item"><i class="fa-solid fa-fingerprint text-emerald"></i> Forensic Student Watermarking</div>
+          <div class="sec-item"><i class="fa-solid fa-server text-emerald"></i> Multi-AZ CloudFront OAC</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 {{ tenantService.currentTenant().name }}. All rights reserved. Operating on EnglishHive Enterprise Architecture.</p>
+      <div class="bottom-links">
+        <a href="javascript:void(0)">Privacy Policy</a>
+        <a href="javascript:void(0)">Terms of Service</a>
+        <a href="javascript:void(0)">Verification Code API</a>
+      </div>
+    </div>
+  </div>
+</footer>
