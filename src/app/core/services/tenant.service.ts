@@ -2,12 +2,13 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DEFAULT_TENANTS, Tenant } from '../models/tenant.model';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TenantService {
-  private apiUrl = 'http://localhost:8080/api/v1/tenants';
+  private apiUrl = `${environment.apiUrl}/tenants`;
 
   tenants = signal<Tenant[]>(DEFAULT_TENANTS);
   currentTenant = signal<Tenant>(DEFAULT_TENANTS[0]);

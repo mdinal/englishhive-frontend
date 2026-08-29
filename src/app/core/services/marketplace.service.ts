@@ -3,12 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { CartItem, Material, Order } from '../models/marketplace.model';
 import { ToastService } from './toast.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MarketplaceService {
-  private apiUrl = 'http://localhost:8080/api/v1/marketplace';
+  private apiUrl = `${environment.apiUrl}/marketplace`;
 
   cartItems = signal<CartItem[]>([]);
   cartCount = computed(() => this.cartItems().length);

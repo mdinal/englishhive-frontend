@@ -5,11 +5,13 @@ import { AuthResponse, User, Role } from '../models/auth.model';
 import { ToastService } from './toast.service';
 import { Observable, tap, catchError, throwError } from 'rxjs';
 
+import { environment } from '../../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/v1/auth';
+  private apiUrl = `${environment.apiUrl}/auth`;
 
   currentUser = signal<User | null>(null);
   token = signal<string | null>(null);

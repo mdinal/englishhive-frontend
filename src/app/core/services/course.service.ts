@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Course, StreamKeyResponse } from '../models/course.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CourseService {
-  private apiUrl = 'http://localhost:8080/api/v1/courses';
-  private mediaUrl = 'http://localhost:8080/api/v1/media';
+  private apiUrl = `${environment.apiUrl}/courses`;
+  private mediaUrl = `${environment.apiUrl}/media`;
 
   constructor(private http: HttpClient) {}
 
