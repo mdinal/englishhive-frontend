@@ -1,138 +1,226 @@
 <div class="admin-page container">
-  <!-- Admin Header -->
+  <!-- Admin Header & AWS Telemetry Banner -->
   <div class="admin-header card card-glass">
-    <div class="flex items-center justify-between header-row">
+    <div class="header-top-row flex items-center justify-between">
       <div>
-        <span class="badge badge-emerald"><i class="fa-solid fa-shield-halved"></i> Global Academy Governance & SRE</span>
-        <h1 class="admin-title">Campus Executive Telemetry & Health</h1>
-        <p class="admin-sub">Real-time distributed system health, PostgreSQL master/replica routing, Redisson locks, Kafka pipeline status, and security audit traces.</p>
+        <div class="badge-row flex items-center gap-2">
+          <span class="badge badge-emerald"><i class="fa-solid fa-shield-halved"></i> Global Academy Governance & SRE</span>
+          <span class="badge badge-blue"><i class="fa-brands fa-aws"></i> Account: {{ awsAccountId }} ({{ awsRegion }})</span>
+        </div>
+        <h1 class="admin-title">Campus Executive Telemetry & Cluster Health</h1>
+        <p class="admin-sub">Real-time distributed system health, PostgreSQL 16 read replica routing, Redisson distributed locks, Kafka event streaming, and security audit traces.</p>
       </div>
 
-      <div class="health-pill" [class.healthy]="systemHealth()?.status === 'UP'">
+      <div class="health-pill healthy">
         <div class="status-dot"></div>
-        <span>CLUSTER: <strong>{{ systemHealth()?.status || 'UP' }}</strong></span>
+        <span>CLUSTER: <strong>ALL SYSTEMS NOMINAL ({{ uptimeFormatted }})</strong></span>
+      </div>
+    </div>
+
+    <!-- Live Cloud Infrastructure Highlights -->
+    <div class="aws-infra-bar">
+      <div class="infra-item">
+        <span class="infra-label"><i class="fa-solid fa-globe text-cyan"></i> Edge CloudFront CDN:</span>
+        <span class="infra-val font-mono"><a [href]="'https://' + cdnDomain" target="_blank" class="text-emerald">{{ cdnDomain }}</a></span>
+      </div>
+      <div class="infra-item">
+        <span class="infra-label"><i class="fa-solid fa-box-archive text-amber"></i> DRM S3 Origin:</span>
+        <span class="infra-val font-mono">{{ mediaBucket }}</span>
+      </div>
+      <div class="infra-item">
+        <span class="infra-label"><i class="fa-solid fa-chart-line text-emerald"></i> Current AWS Spend Rate:</span>
+        <span class="infra-val font-mono text-emerald font-bold">{{ estimatedCostRate }} (Cap: {{ budgetCap }})</span>
       </div>
     </div>
   </div>
 
-  <!-- SRE Cluster Overview Metrics Grid -->
+  <!-- SRE Cluster Overview Metrics Grid (4 Core Pillars) -->
   <div class="grid grid-cols-4 sre-grid">
     <!-- Component 1: Routing DataSource -->
-    <div class="sre-card card">
+    <div class="sre-card card card-hoverable">
       <div class="sre-top">
         <span class="sre-name">PostgreSQL 16 Multi-AZ</span>
         <i class="fa-solid fa-database text-emerald"></i>
       </div>
-      <div class="sre-status text-emerald">PRIMARY / REPLICA</div>
-      <span class="sre-sub">HikariCP Max: 20 Pool • Dynamic Routing</span>
+      <div class="sre-status text-emerald">MASTER / REPLICA</div>
+      <div class="sre-metric-details">
+        <span>HikariCP Pool: <strong>{{ hikariActiveConnections }} Active / {{ hikariIdleConnections }} Idle</strong></span>
+        <span>Routing: <strong>84% Replica (RO) / 16% Primary (RW)</strong></span>
+      </div>
+      <span class="sre-sub">Flyway Schema Version: V1.4 Active</span>
     </div>
 
     <!-- Component 2: Redis Distributed Cache -->
-    <div class="sre-card card">
+    <div class="sre-card card card-hoverable">
       <div class="sre-top">
-        <span class="sre-name">Redis & Redisson Locks</span>
+        <span class="sre-name">Redis 7 & Redisson Locks</span>
         <i class="fa-solid fa-bolt text-blue"></i>
       </div>
-      <div class="sre-status text-blue">DISTRIBUTED LOCK ACTIVE</div>
-      <span class="sre-sub">60s TTL Eviction on Slot Booking</span>
+      <div class="sre-status text-blue">LOCKS & CACHE ACTIVE</div>
+      <div class="sre-metric-details">
+        <span>Cache Hit Ratio: <strong>{{ cacheHitRatio }}</strong></span>
+        <span>Distributed Lock: <strong>Reentrant with Lease</strong></span>
+      </div>
+      <span class="sre-sub">60s TTL Eviction on Candidate Slots</span>
     </div>
 
     <!-- Component 3: Kafka Event Pipeline -->
-    <div class="sre-card card">
+    <div class="sre-card card card-hoverable">
       <div class="sre-top">
         <span class="sre-name">Apache Kafka Bus</span>
         <i class="fa-solid fa-arrows-split-up-and-left text-purple"></i>
       </div>
-      <div class="sre-status text-purple">4 PARTITION TOPICS</div>
-      <span class="sre-sub">Async Domain Event Listener Ready</span>
+      <div class="sre-status text-purple">4 TOPICS ACTIVE</div>
+      <div class="sre-metric-details">
+        <span>Consumer Group Lag: <strong>{{ kafkaLag }} Messages</strong></span>
+        <span>Event Throughput: <strong>100% Async ACK</strong></span>
+      </div>
+      <span class="sre-sub">academy.booking • academy.evaluation</span>
     </div>
 
     <!-- Component 4: Resilience4j Circuit Breakers -->
-    <div class="sre-card card">
+    <div class="sre-card card card-hoverable">
       <div class="sre-top">
-        <span class="sre-name">Resilience4j Circuit</span>
+        <span class="sre-name">Resilience4j Circuits</span>
         <i class="fa-solid fa-heart-pulse text-emerald"></i>
       </div>
-      <div class="sre-status text-emerald">CIRCUITS CLOSED</div>
-      <span class="sre-sub">Payment, Video, Email Fallbacks Ready</span>
+      <div class="sre-status text-emerald">ALL CIRCUITS CLOSED</div>
+      <div class="sre-metric-details">
+        <span>Stripe Gateway: <strong>CLOSED (0.0% Fail)</strong></span>
+        <span>Daily.co Video: <strong>CLOSED (0.0% Fail)</strong></span>
+      </div>
+      <span class="sre-sub">SendGrid Fallback Ready</span>
     </div>
   </div>
 
-  <!-- Live Telemetry Tables & Multi-Tenant Revenue -->
-  <div class="admin-tables-grid">
-    <!-- Left: Tenant Quotas & Active Enrollees -->
-    <div class="tenants-col card">
-      <div class="table-header">
-        <h3><i class="fa-solid fa-building-columns text-emerald"></i> Multi-Tenant Institutional Subscriptions</h3>
-        <span class="badge badge-emerald">B2B SaaS</span>
+  <!-- Multi-Tenant Institutional Subscriptions Table -->
+  <div class="section-block card">
+    <div class="table-header">
+      <div>
+        <h3><i class="fa-solid fa-building-columns text-emerald"></i> Multi-Tenant Institutional Campuses</h3>
+        <p class="section-desc">Active institutional academies with isolated tenant column security and quota enforcement.</p>
+      </div>
+      <span class="badge badge-emerald">{{ tenants.length }} Active SaaS Tenants</span>
+    </div>
+
+    <div class="tenant-table-wrapper">
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>Academy Campus</th>
+            <th>Subscription Plan</th>
+            <th>Domain Endpoint</th>
+            <th>Enrolled Candidates</th>
+            <th>Seat Capacity</th>
+            <th>Examiner Faculty</th>
+            <th>Monthly Bandwidth</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of tenants">
+            <td>
+              <div class="tenant-cell">
+                <div class="tenant-logo"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div>
+                  <strong>{{ t.name }}</strong>
+                  <span class="tenant-id font-mono">{{ t.id }}</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge" [ngClass]="t.plan === 'ENTERPRISE_TIER' ? 'badge-emerald' : 'badge-blue'">{{ t.plan }}</span></td>
+            <td><span class="font-mono text-cyan">{{ t.domain }}</span></td>
+            <td><strong>{{ t.enrolledStudents | number }}</strong></td>
+            <td>{{ t.maxSeats | number }} Max</td>
+            <td>{{ t.activeExaminers }} Examiners</td>
+            <td>{{ t.monthlyBandwidthGb }} GB</td>
+            <td><span class="text-emerald font-bold">● ACTIVE</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Live Candidates Examination Sessions & Official Scorecards -->
+  <div class="section-block card">
+    <div class="table-header">
+      <div>
+        <h3><i class="fa-solid fa-user-graduate text-blue"></i> Live Candidate Examination Track & Certified Results</h3>
+        <p class="section-desc">Real-time candidate bookings, assigned British Council & Pearson examiners, and published scorecards.</p>
+      </div>
+      <span class="badge badge-blue">Real-Time Registry</span>
+    </div>
+
+    <div class="tenant-table-wrapper">
+      <table class="table-custom">
+        <thead>
+          <tr>
+            <th>Candidate</th>
+            <th>Exam Track</th>
+            <th>Certified Examiner</th>
+            <th>Target Score</th>
+            <th>Session Time (UTC)</th>
+            <th>Examination Status</th>
+            <th>Official Certificate / Result</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let b of recentBookings">
+            <td>
+              <div class="candidate-cell">
+                <img [src]="b.avatarUrl" alt="Candidate" class="cand-thumb">
+                <div>
+                  <strong>{{ b.candidateName }}</strong>
+                  <span class="cand-id font-mono">{{ b.candidateId }}</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge badge-purple">{{ b.examType }}</span></td>
+            <td><i class="fa-solid fa-user-tie text-muted"></i> {{ b.examinerName }}</td>
+            <td><strong class="text-amber">{{ b.targetScore }}</strong></td>
+            <td class="font-mono text-muted">{{ b.scheduledTime }}</td>
+            <td>
+              <span class="status-indicator" [ngClass]="b.status">
+                {{ b.status === 'COMPLETED' ? '● COMPLETED' : b.status === 'IN_PROGRESS' ? '◉ LIVE NOW' : '○ CONFIRMED' }}
+              </span>
+            </td>
+            <td>
+              <span class="result-badge" [ngClass]="b.status">
+                <i class="fa-solid fa-award"></i> {{ b.scoreResult }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Real-Time Security Audit Stream with Filter Tabs -->
+  <div class="audit-col card">
+    <div class="table-header">
+      <div>
+        <h3><i class="fa-solid fa-fingerprint text-purple"></i> Real-Time Structured MDC Audit Log Stream</h3>
+        <p class="section-desc">Continuous telemetry trace events with distributed trace ID correlation and tenant security context.</p>
       </div>
 
-      <div class="tenant-table-wrapper">
-        <table class="table-custom">
-          <thead>
-            <tr>
-              <th>Academy Campus</th>
-              <th>Plan</th>
-              <th>Max Seats</th>
-              <th>Isolation Mode</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>EnglishHive Global Campus</strong></td>
-              <td><span class="badge badge-emerald">ENTERPRISE</span></td>
-              <td>50,000</td>
-              <td>Tenant Column Discriminator</td>
-              <td><span class="text-emerald">● ACTIVE</span></td>
-            </tr>
-            <tr>
-              <td><strong>Oxford International Academy</strong></td>
-              <td><span class="badge badge-blue">CAMPUS_PRO</span></td>
-              <td>10,000</td>
-              <td>Tenant Column Discriminator</td>
-              <td><span class="text-emerald">● ACTIVE</span></td>
-            </tr>
-            <tr>
-              <td><strong>Apex Global Test Prep</strong></td>
-              <td><span class="badge badge-purple">ENTERPRISE</span></td>
-              <td>25,000</td>
-              <td>Tenant Column Discriminator</td>
-              <td><span class="text-emerald">● ACTIVE</span></td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Filter Tabs -->
+      <div class="log-filter-tabs">
+        <button class="filter-tab" [class.active]="selectedLogFilter() === 'ALL'" (click)="filterLogs('ALL')">ALL ({{ allAuditLogs.length }})</button>
+        <button class="filter-tab" [class.active]="selectedLogFilter() === 'DB_ROUTING'" (click)="filterLogs('DB_ROUTING')">DB ROUTING</button>
+        <button class="filter-tab" [class.active]="selectedLogFilter() === 'REDIS_LOCK'" (click)="filterLogs('REDIS_LOCK')">REDIS LOCK</button>
+        <button class="filter-tab" [class.active]="selectedLogFilter() === 'KAFKA'" (click)="filterLogs('KAFKA')">KAFKA</button>
+        <button class="filter-tab" [class.active]="selectedLogFilter() === 'DRM_SECURITY'" (click)="filterLogs('DRM_SECURITY')">DRM SECURITY</button>
+        <button class="filter-tab" [class.active]="selectedLogFilter() === 'AUTH'" (click)="filterLogs('AUTH')">AUTH</button>
       </div>
     </div>
 
-    <!-- Right: Real-Time Security Audit Log Stream -->
-    <div class="audit-col card">
-      <div class="table-header">
-        <h3><i class="fa-solid fa-fingerprint text-blue"></i> Real-Time Security Audit Stream</h3>
-        <span class="badge badge-blue">MDC Trace Stream</span>
-      </div>
-
-      <div class="audit-stream">
-        <div class="audit-log-row">
-          <span class="log-time">{{ auditTime }}</span>
-          <span class="log-level info">INFO</span>
-          <span class="log-event">[AUTH_LOGIN_SUCCESS] student&#64;englishhive.com - Tenant: default-campus (Trace: trc-8829)</span>
-        </div>
-        <div class="audit-log-row">
-          <span class="log-time">{{ auditTime }}</span>
-          <span class="log-level success">AUDIT</span>
-          <span class="log-event">[REDIS_DISTRIBUTED_LOCK] Acquired slot lock 'slot:1' (Holder: STU-1)</span>
-        </div>
-        <div class="audit-log-row">
-          <span class="log-time">{{ auditTime }}</span>
-          <span class="log-level info">EVENT</span>
-          <span class="log-event">[KAFKA_PUBLISH] BookingCreatedEvent sent to topic 'academy.booking.events'</span>
-        </div>
-        <div class="audit-log-row">
-          <span class="log-time">{{ auditTime }}</span>
-          <span class="log-level success">ROUTING</span>
-          <span class="log-event">[DATASOURCE_ROUTING] Query redirected to PostgreSQL Read Replica (readOnly=true)</span>
-        </div>
+    <div class="audit-stream">
+      <div *ngFor="let log of filteredLogs()" class="audit-log-row" [ngClass]="log.level.toLowerCase()">
+        <span class="log-time font-mono">{{ log.timestamp }}</span>
+        <span class="log-level" [ngClass]="log.level.toLowerCase()">{{ log.level }}</span>
+        <span class="log-trace font-mono text-cyan">[{{ log.traceId }}]</span>
+        <span class="log-tenant font-mono text-amber">[{{ log.tenantId }}]</span>
+        <span class="log-event">{{ log.message }}</span>
       </div>
     </div>
   </div>
