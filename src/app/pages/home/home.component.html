@@ -1,232 +1,312 @@
 <div class="home-page">
-  <!-- 1. Hero Section with Institutional Aesthetics -->
+  <!-- 1. Hero Section with Stitch Academic Aesthetics & 3D Interactive Buddy -->
   <section class="hero-section">
     <div class="container hero-container">
       <div class="hero-content">
         <div class="hero-badge">
-          <span class="badge badge-emerald">
-            <i class="fa-solid fa-certificate"></i> Official British Council & Pearson Standards
+          <span class="badge badge-navy">
+            <span class="material-symbols-outlined text-[16px]">school</span> Official British Council & Pearson Standards
           </span>
         </div>
         <h1 class="hero-headline">
-          Master Global English. <br>
-          <span class="text-gradient">Secure Your Target Band.</span>
+          Master English with EnglishHive
         </h1>
         <p class="hero-subhead">
-          The premier API-driven language academy combining rigorous curriculum tracks in <strong>IELTS</strong>, <strong>PTE Academic</strong>, and <strong>Executive Workplace English</strong> with certified live 1-on-1 examiner mock evaluations.
+          Achieve your desired scores in IELTS, PTE, and spoken English with our expert-led courses, certified 1-on-1 examiner mock tests, and comprehensive materials.
         </p>
 
         <div class="hero-cta-group">
           <a routerLink="/courses" class="btn btn-primary btn-lg">
-            <i class="fa-solid fa-compass"></i> Explore Prep Tracks
+            Explore Courses
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
           </a>
-          <a routerLink="/mock-interviews" class="btn btn-secondary btn-lg">
-            <i class="fa-solid fa-video"></i> Book 1-on-1 Examiner Mock
+          <a routerLink="/marketplace" class="btn btn-secondary btn-lg">
+            Shop Books
+            <span class="material-symbols-outlined text-[18px]">menu_book</span>
           </a>
         </div>
 
         <!-- Trust Badges -->
         <div class="hero-trust-row">
           <div class="trust-item">
-            <i class="fa-solid fa-users text-emerald"></i>
+            <span class="material-symbols-outlined text-primary">groups</span>
             <span><strong>12,400+</strong> Candidates Trained</span>
           </div>
           <div class="trust-item">
-            <i class="fa-solid fa-award text-emerald"></i>
+            <span class="material-symbols-outlined text-primary">verified</span>
             <span><strong>8.2</strong> Average IELTS Band</span>
           </div>
           <div class="trust-item">
-            <i class="fa-solid fa-shield-check text-emerald"></i>
+            <span class="material-symbols-outlined text-primary">security</span>
             <span><strong>98.4%</strong> Target Score Pass Rate</span>
           </div>
         </div>
       </div>
 
-      <!-- 2. Interactive IELTS / PTE Band Score Calculator Tool -->
-      <div class="hero-widget-card card card-glass">
-        <div class="widget-header">
-          <div class="widget-icon">
-            <i class="fa-solid fa-calculator text-emerald"></i>
+      <!-- Hero Visual: 3D Interactive Study Buddy + Band Estimator -->
+      <div class="hero-visual-column">
+        <div class="study-buddy-container">
+          <div #threeCanvas class="three-canvas-holder"></div>
+          <div class="buddy-caption">
+            <span class="badge badge-orange">Interactive 3D Study Guide</span>
+          </div>
+        </div>
+
+        <!-- Interactive Band Score Calculator Tool -->
+        <div class="hero-widget-card card card-glass">
+          <div class="widget-header">
+            <div class="widget-icon">
+              <span class="material-symbols-outlined text-primary">calculate</span>
+            </div>
+            <div>
+              <h3 class="widget-title">Band Score Estimator</h3>
+              <p class="widget-desc">Calculate your projected band score based on official criteria</p>
+            </div>
+          </div>
+
+          <div class="calculator-body">
+            <div class="calc-field">
+              <label class="calc-label">Fluency & Coherence: <strong>{{ fluencyInput }}</strong></label>
+              <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="fluencyInput" (ngModelChange)="calculateBand()" class="calc-slider">
+            </div>
+
+            <div class="calc-field">
+              <label class="calc-label">Lexical Resource (Vocab): <strong>{{ lexicalInput }}</strong></label>
+              <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="lexicalInput" (ngModelChange)="calculateBand()" class="calc-slider">
+            </div>
+
+            <div class="calc-field">
+              <label class="calc-label">Grammatical Range: <strong>{{ grammarInput }}</strong></label>
+              <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="grammarInput" (ngModelChange)="calculateBand()" class="calc-slider">
+            </div>
+
+            <div class="calc-field">
+              <label class="calc-label">Pronunciation & Stress: <strong>{{ pronunciationInput }}</strong></label>
+              <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="pronunciationInput" (ngModelChange)="calculateBand()" class="calc-slider">
+            </div>
+
+            <div class="calc-result-box">
+              <div class="result-left">
+                <span class="result-sub">Projected IELTS Band</span>
+                <span class="result-score">Band {{ calculatedBand() }}</span>
+              </div>
+              <div class="result-right">
+                <span class="result-pte">PTE: <strong>{{ pteEquivalent() }} / 90</strong></span>
+                <a routerLink="/mock-interviews" class="btn btn-primary btn-sm">Verify in Live Mock</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Certification Pathways (Stitch 3-Card Grid) -->
+  <section class="pathways-section container">
+    <div class="section-header text-center">
+      <span class="badge badge-navy">Certified Learning Tracks</span>
+      <h2 class="section-heading">Certification Pathways</h2>
+      <p class="section-subtext">Structured preparation pathways designed by certified examiners to achieve high-stakes scores.</p>
+    </div>
+
+    <div class="grid grid-cols-3 pathways-grid">
+      <!-- IELTS -->
+      <div class="pathway-card card card-hoverable">
+        <div class="pathway-icon-box">
+          <span class="material-symbols-outlined">language</span>
+        </div>
+        <h3 class="pathway-title">IELTS Preparation</h3>
+        <p class="pathway-desc">Comprehensive modules covering Academic & General Reading, Writing blueprints, Listening, and 1-on-1 Speaking mock interviews.</p>
+        <a routerLink="/courses" [queryParams]="{category: 'IELTS'}" class="pathway-link">
+          View Modules →
+        </a>
+      </div>
+
+      <!-- PTE -->
+      <div class="pathway-card card card-hoverable">
+        <div class="pathway-icon-box">
+          <span class="material-symbols-outlined">computer</span>
+        </div>
+        <h3 class="pathway-title">PTE Academic</h3>
+        <p class="pathway-desc">AI-scored mock tests, oral acoustic fluency training, Read Aloud stress rules, and verified high-frequency prediction banks.</p>
+        <a routerLink="/courses" [queryParams]="{category: 'PTE'}" class="pathway-link">
+          View Modules →
+        </a>
+      </div>
+
+      <!-- Spoken English -->
+      <div class="pathway-card card card-hoverable">
+        <div class="pathway-icon-box">
+          <span class="material-symbols-outlined">record_voice_over</span>
+        </div>
+        <h3 class="pathway-title">Spoken English</h3>
+        <p class="pathway-desc">Fluency building, pronunciation clinics, corporate presentations, and live peer conversation practice rooms.</p>
+        <a routerLink="/courses" [queryParams]="{category: 'SPOKEN_ENGLISH'}" class="pathway-link">
+          View Modules →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Featured Learning Modules (Stitch Bento Grid) -->
+  <section class="bento-section">
+    <div class="container">
+      <div class="flex items-center justify-between mb-8">
+        <div>
+          <span class="badge badge-navy">Curriculum Highlights</span>
+          <h2 class="section-heading">Featured Learning Modules</h2>
+        </div>
+        <a routerLink="/courses" class="btn btn-ghost">View All Courses <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+      </div>
+
+      <div class="bento-grid">
+        <!-- Large Feature: Advanced Writing Strategies -->
+        <div class="bento-card bento-large card">
+          <div class="bento-img-wrap">
+            <img class="bento-img" src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=800&auto=format&fit=crop&q=80" alt="IELTS Advanced Writing">
+            <span class="bento-tag">IELTS Intensive</span>
+          </div>
+          <div class="bento-content">
+            <div>
+              <h3 class="bento-title">Advanced Writing Strategies</h3>
+              <p class="bento-desc">Master complex sentence structures, academic cohesion, and vocabulary required for Band 8.0+. Includes personalized examiner essay feedback.</p>
+            </div>
+            <div class="bento-footer">
+              <span class="bento-meta">4 Weeks • Online</span>
+              <a routerLink="/courses" class="btn btn-secondary btn-sm">Enroll Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Small Feature 1: PTE Listening -->
+        <div class="bento-card bento-wide card card-hoverable">
+          <div class="bento-icon-avatar">
+            <span class="material-symbols-outlined text-3xl">headphones</span>
           </div>
           <div>
-            <h3 class="widget-title">Band Score Estimator</h3>
-            <p class="widget-desc">Calculate your projected band score based on official criteria</p>
+            <span class="badge badge-orange text-xs mb-1">PTE Listening</span>
+            <h3 class="bento-sub-title">Summarize Spoken Text</h3>
+            <p class="bento-desc">Develop note-taking skills and identify key arguments from academic lectures.</p>
           </div>
         </div>
 
-        <div class="calculator-body">
-          <div class="calc-field">
-            <label class="calc-label">Fluency & Coherence: <strong>{{ fluencyInput }}</strong></label>
-            <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="fluencyInput" (ngModelChange)="calculateBand()" class="calc-slider">
+        <!-- Small Feature 2: Speaking Club -->
+        <div class="bento-card bento-dark">
+          <div>
+            <span class="material-symbols-outlined text-secondary text-3xl mb-2">forum</span>
+            <h3 class="bento-sub-title text-white">Speaking Club</h3>
+            <p class="bento-desc text-white-opacity">Weekly live interactive sessions to practice fluency with global peers.</p>
           </div>
+          <a routerLink="/live-room" class="btn btn-secondary btn-sm btn-block mt-4">Join Club</a>
+        </div>
 
-          <div class="calc-field">
-            <label class="calc-label">Lexical Resource (Vocab): <strong>{{ lexicalInput }}</strong></label>
-            <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="lexicalInput" (ngModelChange)="calculateBand()" class="calc-slider">
-          </div>
-
-          <div class="calc-field">
-            <label class="calc-label">Grammatical Range: <strong>{{ grammarInput }}</strong></label>
-            <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="grammarInput" (ngModelChange)="calculateBand()" class="calc-slider">
-          </div>
-
-          <div class="calc-field">
-            <label class="calc-label">Pronunciation & Stress: <strong>{{ pronunciationInput }}</strong></label>
-            <input type="range" min="5.0" max="9.0" step="0.5" [(ngModel)]="pronunciationInput" (ngModelChange)="calculateBand()" class="calc-slider">
-          </div>
-
-          <div class="calc-result-box">
-            <div class="result-left">
-              <span class="result-sub">Projected IELTS Band</span>
-              <span class="result-score">Band {{ calculatedBand() }}</span>
+        <!-- Small Feature 3: Diagnostic Test -->
+        <div class="bento-card bento-diag card card-hoverable">
+          <div>
+            <div class="flex justify-between items-start mb-2">
+              <span class="material-symbols-outlined text-primary">assessment</span>
+              <span class="badge badge-emerald">Free</span>
             </div>
-            <div class="result-right">
-              <span class="result-pte">PTE Equivalent: <strong>{{ pteEquivalent() }} / 90</strong></span>
-              <a routerLink="/mock-interviews" class="btn btn-outline btn-sm">Verify in Live Mock</a>
-            </div>
+            <h3 class="bento-sub-title">Diagnostic Test</h3>
+            <p class="bento-desc">Find your current benchmark level and receive a customized syllabus plan.</p>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 3. Curriculum Tracks Section -->
-  <section class="tracks-section container">
-    <div class="section-header text-center">
-      <span class="badge badge-blue">Targeted Skill Tracks</span>
-      <h2 class="section-heading">Structured Preparation Pathways</h2>
-      <p class="section-subtext">Purpose-built curriculum tracks designed to eliminate guesswork and deliver complete test readiness.</p>
-    </div>
-
-    <div class="tracks-grid grid grid-cols-3">
-      <!-- Track 1: IELTS -->
-      <div class="track-card card card-hoverable">
-        <div class="track-icon-wrapper ielts">
-          <i class="fa-solid fa-graduation-cap"></i>
-        </div>
-        <span class="badge badge-emerald">Academic & General</span>
-        <h3 class="track-name">IELTS 8+ Band Mastertrack</h3>
-        <p class="track-desc">
-          Comprehensive training covering Listening, Reading, Task 1 & 2 Writing blueprints, and 1-on-1 Speaking mock interviews.
-        </p>
-        <ul class="track-features">
-          <li><i class="fa-solid fa-check text-emerald"></i> Examiner Traps & Part 3 Abstract Discussion</li>
-          <li><i class="fa-solid fa-check text-emerald"></i> Task 2 Cohesion & Counter-Argument Templates</li>
-          <li><i class="fa-solid fa-check text-emerald"></i> 4 Full-Length Mock Exams with Model Answers</li>
-        </ul>
-        <a routerLink="/courses" [queryParams]="{category: 'IELTS'}" class="btn btn-outline btn-block">Explore IELTS Track</a>
-      </div>
-
-      <!-- Track 2: PTE -->
-      <div class="track-card card card-hoverable">
-        <div class="track-icon-wrapper pte">
-          <i class="fa-solid fa-bolt"></i>
-        </div>
-        <span class="badge badge-blue">79+ Superior English</span>
-        <h3 class="track-name">PTE Academic 79+ Accelerator</h3>
-        <p class="track-desc">
-          AI acoustic algorithm scoring strategies, oral fluency pacing drills, Read Aloud stress rules, and Write from Dictation banks.
-        </p>
-        <ul class="track-features">
-          <li><i class="fa-solid fa-check text-emerald"></i> Real-Time AI Acoustic Speech Training</li>
-          <li><i class="fa-solid fa-check text-emerald"></i> Describe Image & Retell Lecture Formulas</li>
-          <li><i class="fa-solid fa-check text-emerald"></i> Monthly Verified Exam Prediction Question Bank</li>
-        </ul>
-        <a routerLink="/courses" [queryParams]="{category: 'PTE'}" class="btn btn-outline btn-block">Explore PTE Track</a>
-      </div>
-
-      <!-- Track 3: Workplace English -->
-      <div class="track-card card card-hoverable">
-        <div class="track-icon-wrapper spoken">
-          <i class="fa-solid fa-briefcase"></i>
-        </div>
-        <span class="badge badge-purple">Professional Fluency</span>
-        <h3 class="track-name">Executive Business & Workplace</h3>
-        <p class="track-desc">
-          High-impact workplace communication, executive boardroom presentation mastery, accent neutralization, and cross-border negotiation.
-        </p>
-        <ul class="track-features">
-          <li><i class="fa-solid fa-check text-emerald"></i> Persuasive Executive Pitch & Presentation Skills</li>
-          <li><i class="fa-solid fa-check text-emerald"></i> High-Stakes Negotiation & Dispute Resolution</li>
-          <li><i class="fa-solid fa-check text-emerald"></i> Accent Clarity & Natural Idiomatic Phrasing</li>
-        </ul>
-        <a routerLink="/courses" [queryParams]="{category: 'SPOKEN_ENGLISH'}" class="btn btn-outline btn-block">Explore Business Track</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4. Featured Course Masterclasses -->
-  <section class="featured-section container">
-    <div class="flex items-center justify-between section-row">
-      <div>
-        <span class="badge badge-emerald">On-Demand Masterclasses</span>
-        <h2 class="section-heading">Featured Video Masterclasses</h2>
-      </div>
-      <a routerLink="/courses" class="btn btn-ghost">View All Courses <i class="fa-solid fa-arrow-right"></i></a>
-    </div>
-
-    <div class="grid grid-cols-3 course-grid">
-      <div *ngFor="let course of featuredCourses()" class="course-card card card-hoverable">
-        <div class="course-thumb">
-          <img [src]="course.thumbnailUrl" [alt]="course.title" class="thumb-img">
-          <span class="category-pill">{{ course.category }}</span>
-          <span class="level-pill">{{ course.level }}</span>
-        </div>
-        <div class="course-body">
-          <div class="course-meta">
-            <span class="rating"><i class="fa-solid fa-star text-amber"></i> {{ course.rating }} ({{ course.totalReviews }})</span>
-            <span class="duration"><i class="fa-solid fa-clock"></i> {{ course.totalHours }} hrs</span>
-          </div>
-          <h4 class="course-title">{{ course.title }}</h4>
-          <p class="course-desc">{{ course.description | slice:0:110 }}...</p>
-          <div class="instructor-row">
-            <i class="fa-solid fa-chalkboard-user text-emerald"></i>
-            <span>{{ course.instructorName }}</span>
-          </div>
-          <div class="course-footer">
-            <span class="course-price">${{ course.price }}</span>
-            <a [routerLink]="['/courses', course.slug]" class="btn btn-primary btn-sm">Watch Preview</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 5. Certified Mock Interview Live Callout -->
-  <section class="mock-callout-section container">
-    <div class="callout-card card card-glass">
-      <div class="callout-grid">
-        <div class="callout-text">
-          <span class="badge badge-emerald">Live 1-on-1 Assessment</span>
-          <h2 class="callout-title">Experience Authentic Exam Conditions Before Test Day</h2>
-          <p class="callout-desc">
-            Book a 45-minute live speaking evaluation with certified examiners. Receive real-time grading across official criteria, instant meeting links, audio playback, and an official verified performance certificate.
-          </p>
-          <div class="callout-features">
-            <div class="feat-item"><i class="fa-solid fa-bolt text-emerald"></i> Instant Room URL Generation</div>
-            <div class="feat-item"><i class="fa-solid fa-lock text-emerald"></i> Zero Double-Booking Guarantee</div>
-            <div class="feat-item"><i class="fa-solid fa-stamp text-emerald"></i> Official Certificate Code</div>
-          </div>
-          <a routerLink="/mock-interviews" class="btn btn-primary btn-lg">
-            <i class="fa-solid fa-calendar-check"></i> Book Your Examiner Slot Now
+          <a routerLink="/mock-interviews" class="diagnostic-link">
+            Start Test <span class="material-symbols-outlined text-sm">arrow_forward</span>
           </a>
         </div>
-        <div class="callout-preview">
-          <div class="mock-score-preview card">
-            <div class="flex items-center justify-between mb-2">
-              <span class="badge badge-emerald">IELTS SPEAKING MOCK</span>
-              <span class="score-pill">Band 8.5</span>
-            </div>
-            <h4 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Dr. Arthur Pendelton</h4>
-            <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 1rem;">
-              "Candidate demonstrated effortless discourse coherence, natural idioms, and precise lexical substitution under Part 3 pressure."
-            </p>
-            <div class="criteria-mini-bars">
-              <div class="mini-bar-row"><span>Fluency: 8.5</span> <div class="bar"><div style="width: 94%"></div></div></div>
-              <div class="mini-bar-row"><span>Lexical: 8.5</span> <div class="bar"><div style="width: 94%"></div></div></div>
-              <div class="mini-bar-row"><span>Grammar: 8.0</span> <div class="bar"><div style="width: 88%"></div></div></div>
-              <div class="mini-bar-row"><span>Pronunciation: 9.0</span> <div class="bar"><div style="width: 100%"></div></div></div>
-            </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Recommended Resources / Best-Selling Books (Stitch 4-Column Showcase) -->
+  <section class="resources-section container">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <span class="badge badge-navy">Study Materials</span>
+        <h2 class="section-heading">Recommended Resources</h2>
+      </div>
+      <a routerLink="/marketplace" class="btn btn-ghost">View All Books <span class="material-symbols-outlined text-[18px]">arrow_forward</span></a>
+    </div>
+
+    <div class="grid grid-cols-4 books-grid">
+      <div *ngFor="let book of books()" class="book-card group card card-hoverable">
+        <div class="book-cover-wrap">
+          <img [src]="book.image" [alt]="book.title" class="book-cover-img">
+        </div>
+        <h3 class="book-title">{{ book.title }}</h3>
+        <p class="book-sub">{{ book.subtitle }}</p>
+        <div class="book-bottom">
+          <span class="book-price">{{ book.price }}</span>
+          <a routerLink="/marketplace" class="btn btn-outline btn-sm">Order</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Exam Simulation & Available Slots Booking (Stitch Callout) -->
+  <section class="simulation-section">
+    <div class="container">
+      <div class="simulation-grid">
+        <div class="simulation-left">
+          <div class="sim-badge">
+            <span class="badge badge-orange">
+              <span class="material-symbols-outlined text-[16px]">verified</span> Expert Evaluation
+            </span>
+          </div>
+          <h2 class="sim-headline">Simulate the Real Exam Experience</h2>
+          <p class="sim-subhead">
+            Don't let test anxiety affect your score. Book a 1-on-1 mock speaking test or interview preparation session with certified examiners for detailed, actionable feedback.
+          </p>
+
+          <div *ngIf="bookingSuccessMessage()" class="booking-toast">
+            <span class="material-symbols-outlined text-success">check_circle</span>
+            <span>{{ bookingSuccessMessage() }}</span>
+          </div>
+
+          <div class="sim-cta-group">
+            <a routerLink="/mock-interviews" class="btn btn-secondary btn-lg">
+              <span class="material-symbols-outlined text-[18px]">calendar_today</span> Book Examiner Session
+            </a>
+            <a routerLink="/courses" class="btn btn-outline btn-lg text-white border-white">
+              Learn More
+            </a>
+          </div>
+        </div>
+
+        <div class="simulation-right">
+          <div class="slots-card card">
+            <h3 class="slots-title">Next Available Slots</h3>
+            <ul class="slots-list">
+              <li class="slot-item" [class.selected]="selectedSlot() === 'Tomorrow, 10:00 AM'">
+                <div>
+                  <div class="slot-time">Tomorrow, 10:00 AM</div>
+                  <div class="slot-type">IELTS Speaking Mock (Part 1-3)</div>
+                </div>
+                <button class="btn btn-sm" [class.btn-secondary]="selectedSlot() === 'Tomorrow, 10:00 AM'" [class.btn-outline]="selectedSlot() !== 'Tomorrow, 10:00 AM'" (click)="selectSlot('Tomorrow, 10:00 AM')">
+                  {{ selectedSlot() === 'Tomorrow, 10:00 AM' ? 'Selected' : 'Select' }}
+                </button>
+              </li>
+
+              <li class="slot-item" [class.selected]="selectedSlot() === 'Tomorrow, 2:30 PM'">
+                <div>
+                  <div class="slot-time">Tomorrow, 2:30 PM</div>
+                  <div class="slot-type">PTE Mock Test Oral Review</div>
+                </div>
+                <button class="btn btn-sm" [class.btn-secondary]="selectedSlot() === 'Tomorrow, 2:30 PM'" [class.btn-outline]="selectedSlot() !== 'Tomorrow, 2:30 PM'" (click)="selectSlot('Tomorrow, 2:30 PM')">
+                  {{ selectedSlot() === 'Tomorrow, 2:30 PM' ? 'Selected' : 'Select' }}
+                </button>
+              </li>
+
+              <li class="slot-item" [class.selected]="selectedSlot() === 'Oct 24, 09:00 AM'">
+                <div>
+                  <div class="slot-time">Oct 24, 09:00 AM</div>
+                  <div class="slot-type">Executive Workplace Interview Prep</div>
+                </div>
+                <button class="btn btn-sm" [class.btn-secondary]="selectedSlot() === 'Oct 24, 09:00 AM'" [class.btn-outline]="selectedSlot() !== 'Oct 24, 09:00 AM'" (click)="selectSlot('Oct 24, 09:00 AM')">
+                  {{ selectedSlot() === 'Oct 24, 09:00 AM' ? 'Selected' : 'Select' }}
+                </button>
+              </li>
+            </ul>
           </div>
         </div>
       </div>

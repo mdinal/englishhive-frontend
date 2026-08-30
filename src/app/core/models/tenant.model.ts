@@ -16,8 +16,8 @@ export const DEFAULT_TENANTS: Tenant[] = [
     name: 'EnglishHive Global Campus',
     subdomain: 'global',
     logoUrl: 'assets/logos/englishhive-logo.svg',
-    primaryColor: '#10b981',
-    tagline: 'Global Language Academy & Exam Preparation Hub',
+    primaryColor: '#002d62',
+    tagline: 'Academic Authority in English Certification & Language Mastery',
     plan: 'ENTERPRISE',
     maxStudents: 50000,
     active: true
