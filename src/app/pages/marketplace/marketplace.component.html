@@ -31,7 +31,7 @@
         <p class="mat-desc">{{ item.description }}</p>
 
         <div class="mat-footer">
-          <span class="mat-price">\${{ item.price }}</span>
+          <span class="mat-price">${{ item.price }}</span>
           <button class="btn btn-primary btn-sm" (click)="addToCart(item)">
             <i class="fa-solid fa-cart-plus"></i> Add to Cart
           </button>
@@ -57,7 +57,7 @@
             <div class="item-info">
               <span class="item-type-badge">{{ item.itemType }}</span>
               <h4 class="item-title">{{ item.itemTitle }}</h4>
-              <span class="item-price">\${{ item.price }}</span>
+              <span class="item-price">${{ item.price }}</span>
             </div>
             <button class="remove-btn" (click)="marketplaceService.removeFromCart(item.itemType, item.referenceId)">
               <i class="fa-regular fa-trash-can"></i>
@@ -84,15 +84,15 @@
 
         <div class="total-row">
           <span>Subtotal:</span>
-          <strong>\${{ marketplaceService.cartSubtotal() | number:'1.2-2' }}</strong>
+          <strong>${{ marketplaceService.cartSubtotal() | number:'1.2-2' }}</strong>
         </div>
         <div class="total-row discount" *ngIf="appliedDiscount > 0">
           <span>Discount:</span>
-          <strong>-\${{ appliedDiscount | number:'1.2-2' }}</strong>
+          <strong>-${{ appliedDiscount | number:'1.2-2' }}</strong>
         </div>
         <div class="total-row grand-total">
           <span>Total:</span>
-          <strong>\${{ finalTotal | number:'1.2-2' }}</strong>
+          <strong>${{ finalTotal | number:'1.2-2' }}</strong>
         </div>
 
         <button class="btn btn-primary btn-block btn-lg" (click)="proceedCheckout()" [disabled]="checkoutLoading">

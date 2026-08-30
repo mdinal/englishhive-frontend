@@ -184,7 +184,7 @@
             <span>{{ course.instructorName }}</span>
           </div>
           <div class="course-footer">
-            <span class="course-price">\${{ course.price }}</span>
+            <span class="course-price">${{ course.price }}</span>
             <a [routerLink]="['/courses', course.slug]" class="btn btn-primary btn-sm">Watch Preview</a>
           </div>
         </div>

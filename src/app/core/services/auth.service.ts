@@ -67,7 +67,7 @@ export class AuthService {
           email: credentials.email,
           fullName: name,
           role: mockRole,
-          tenantId: 'tenant-default',
+          tenantId: 'default-campus',
           avatarUrl: mockRole === 'ROLE_INSTRUCTOR'
             ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'
             : mockRole === 'ROLE_ADMIN'
@@ -97,7 +97,7 @@ export class AuthService {
           email: payload.email,
           fullName: payload.fullName || 'Candidate Member',
           role: 'ROLE_STUDENT',
-          tenantId: 'tenant-default',
+          tenantId: 'default-campus',
           targetExam: payload.targetExam || 'IELTS Academic',
           targetScore: payload.targetScore || '8.0 Band'
         };
@@ -142,7 +142,7 @@ export class AuthService {
       email: 'sarah.jenkins@oxford-prep.edu',
       fullName: 'Sarah Jenkins',
       role: 'ROLE_STUDENT',
-      tenantId: 'tenant-oxford',
+      tenantId: 'oxford-academy',
       avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
       targetExam: 'IELTS Academic',
       targetScore: '8.0 Band'
@@ -159,7 +159,7 @@ export class AuthService {
       email: 'arthur.pendelton@cambridge-exam.org',
       fullName: 'Dr. Arthur Pendelton',
       role: 'ROLE_INSTRUCTOR',
-      tenantId: 'tenant-cambridge',
+      tenantId: 'oxford-academy',
       avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
       targetExam: 'IELTS / PTE',
       targetScore: 'Senior Certified Examiner'
@@ -176,7 +176,7 @@ export class AuthService {
       email: 'lead.admin@englishhive.com',
       fullName: 'Campus Lead Administrator',
       role: 'ROLE_ADMIN',
-      tenantId: 'tenant-default',
+      tenantId: 'default-campus',
       avatarUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150',
       targetExam: 'Platform Admin',
       targetScore: 'SRE & Compliance'
