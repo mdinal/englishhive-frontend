@@ -91,18 +91,25 @@ export class AuthService {
         this.toast.success('Account Created', `Welcome to EnglishHive, ${res.fullName}!`);
       }),
       catchError(() => {
+        const isInstructorRole = payload.role === 'ROLE_INSTRUCTOR';
         const fallbackResponse: AuthResponse = {
           token: `demo-jwt-token-${Date.now()}`,
-          id: 101,
+          id: Math.floor(Math.random() * 1000) + 100,
           email: payload.email,
-          fullName: payload.fullName || 'Candidate Member',
-          role: 'ROLE_STUDENT',
+          fullName: payload.fullName || (isInstructorRole ? 'Faculty Examiner' : 'Candidate Member'),
+          role: isInstructorRole ? 'ROLE_INSTRUCTOR' : 'ROLE_STUDENT',
           tenantId: 'default-campus',
-          targetExam: payload.targetExam || 'IELTS Academic',
-          targetScore: payload.targetScore || '8.0 Band'
+          avatarUrl: isInstructorRole
+            ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150'
+            : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+          targetExam: payload.targetExam || (isInstructorRole ? 'Certified Examiner' : 'IELTS Academic'),
+          targetScore: payload.targetScore || (isInstructorRole ? 'Lead Faculty' : '8.0 Band')
         };
         this.handleAuthSuccess(fallbackResponse);
-        this.toast.success('Candidate Enrolled', `Welcome to EnglishHive, ${fallbackResponse.fullName}!`);
+        this.toast.success(
+          isInstructorRole ? 'Faculty Profile Created' : 'Candidate Enrolled',
+          `Welcome to EnglishHive, ${fallbackResponse.fullName}!`
+        );
         return of(fallbackResponse);
       })
     );

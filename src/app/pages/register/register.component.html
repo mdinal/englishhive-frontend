@@ -2,16 +2,38 @@
   <div class="auth-card card card-glass">
     <div class="auth-header text-center">
       <div class="auth-badge">
-        <i class="fa-solid fa-user-plus"></i>
+        <span class="material-symbols-outlined">person_add</span>
       </div>
-      <h2 class="auth-title">Candidate Registration</h2>
-      <p class="auth-subtitle">Create your student profile to book certified mock interviews and access masterclasses.</p>
+      <h2 class="auth-title">{{ accountType === 'TEACHER' ? 'Teacher & Examiner Onboarding' : 'Candidate Enrollment' }}</h2>
+      <p class="auth-subtitle">
+        {{ accountType === 'TEACHER' ? 'Create a certified faculty profile to open interview slots and grade mock tests.' : 'Create your student profile to book certified mock interviews and access masterclasses.' }}
+      </p>
+    </div>
+
+    <!-- Account Type Selector Tabs -->
+    <div class="account-type-tabs">
+      <button 
+        type="button" 
+        class="tab-btn" 
+        [class.active]="accountType === 'STUDENT'" 
+        (click)="setAccountType('STUDENT')">
+        <span class="material-symbols-outlined text-sm">school</span>
+        Student / Candidate
+      </button>
+      <button 
+        type="button" 
+        class="tab-btn" 
+        [class.active]="accountType === 'TEACHER'" 
+        (click)="setAccountType('TEACHER')">
+        <span class="material-symbols-outlined text-sm">psychology</span>
+        Teacher / Examiner
+      </button>
     </div>
 
     <form (ngSubmit)="onSubmit()" class="auth-form">
       <div class="form-group">
         <label class="form-label">Full Name</label>
-        <input type="text" [(ngModel)]="fullName" name="fullName" required placeholder="e.g. Sarah Jenkins" class="form-input">
+        <input type="text" [(ngModel)]="fullName" name="fullName" required [placeholder]="accountType === 'TEACHER' ? 'e.g. Dr. Arthur Pendelton' : 'e.g. Sarah Jenkins'" class="form-input">
       </div>
 
       <div class="form-group">
@@ -24,7 +46,8 @@
         <input type="password" [(ngModel)]="password" name="password" required placeholder="Minimum 6 characters" class="form-input">
       </div>
 
-      <div class="form-row">
+      <!-- Student Fields -->
+      <div *ngIf="accountType === 'STUDENT'" class="form-row">
         <div class="form-group">
           <label class="form-label">Primary Goal</label>
           <select [(ngModel)]="targetExam" name="targetExam" class="form-select">
@@ -41,14 +64,31 @@
         </div>
       </div>
 
+      <!-- Teacher / Examiner Fields -->
+      <div *ngIf="accountType === 'TEACHER'" class="form-row">
+        <div class="form-group">
+          <label class="form-label">Specialization Track</label>
+          <select [(ngModel)]="targetExam" name="targetExam" class="form-select">
+            <option value="IELTS Speaking & Writing">IELTS Certified Examiner</option>
+            <option value="PTE Academic AI Review">PTE Senior Assessor</option>
+            <option value="Executive Workplace English">Business English Coach</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Faculty Credential / Accreditation</label>
+          <input type="text" [(ngModel)]="targetScore" name="targetScore" placeholder="e.g. British Council / Cambridge Cert." class="form-input">
+        </div>
+      </div>
+
       <button type="submit" class="btn btn-primary btn-block btn-lg" [disabled]="loading">
-        <i *ngIf="loading" class="fa-solid fa-spinner fa-spin"></i>
-        <span *ngIf="!loading">Complete Candidate Enrollment</span>
+        <span *ngIf="loading" class="material-symbols-outlined animate-spin text-sm">progress_activity</span>
+        <span *ngIf="!loading">{{ accountType === 'TEACHER' ? 'Complete Faculty Registration' : 'Complete Candidate Enrollment' }}</span>
       </button>
     </form>
 
     <div class="auth-footer text-center">
-      <p>Already enrolled? <a routerLink="/login" class="text-emerald">Sign In to Dashboard</a></p>
+      <p>Already enrolled? <a routerLink="/login" class="text-secondary font-bold">Sign In to Dashboard</a></p>
     </div>
   </div>
 </div>

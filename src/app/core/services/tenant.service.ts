@@ -14,14 +14,66 @@ export class TenantService {
   currentTenant = signal<Tenant>(DEFAULT_TENANTS[0]);
 
   constructor(private http: HttpClient) {
-    // Load persisted tenant or default
-    const savedTenantId = localStorage.getItem('englishhive_tenant_id');
-    if (savedTenantId) {
-      const match = DEFAULT_TENANTS.find(t => t.id === savedTenantId);
-      if (match) {
-        this.selectTenant(match);
+    this.detectCampusFromUrl();
+  }
+
+  /**
+   * Automatically resolves campus/tenant based on URL subdomain or query parameters.
+   * e.g., oxford.englishhive.com -> 'oxford'
+   * e.g., englishhive.com/?campus=oxford -> 'oxford'
+   */
+  detectCampusFromUrl(): void {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    let detectedIdentifier: string | null = null;
+
+    // 1. Check URL Query Parameters (?campus=oxford, ?tenant=apex, ?institution=oxford)
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryParam = urlParams.get('campus') || urlParams.get('tenant') || urlParams.get('institution');
+    if (queryParam) {
+      detectedIdentifier = queryParam.trim().toLowerCase();
+    }
+
+    // 2. Check Subdomain (e.g. oxford.englishhive.com or apex.domain.com)
+    if (!detectedIdentifier) {
+      const hostname = window.location.hostname;
+      const parts = hostname.split('.');
+      if (parts.length > 2) {
+        const sub = parts[0].toLowerCase();
+        if (sub !== 'www' && sub !== 'app' && sub !== 'api' && sub !== 'dev' && sub !== 'staging') {
+          detectedIdentifier = sub;
+        }
       }
     }
+
+    // 3. Match against known tenants or fallback to saved / default
+    if (detectedIdentifier) {
+      const match = this.tenants().find(t =>
+        t.subdomain.toLowerCase() === detectedIdentifier ||
+        t.id.toLowerCase() === detectedIdentifier ||
+        t.name.toLowerCase().includes(detectedIdentifier!)
+      );
+
+      if (match) {
+        this.selectTenant(match);
+        return;
+      }
+    }
+
+    // 4. Check previously saved tenant or default
+    const savedTenantId = localStorage.getItem('englishhive_tenant_id');
+    if (savedTenantId) {
+      const match = this.tenants().find(t => t.id === savedTenantId);
+      if (match) {
+        this.selectTenant(match);
+        return;
+      }
+    }
+
+    // Default to the primary campus
+    this.selectTenant(DEFAULT_TENANTS[0]);
   }
 
   fetchTenants(): Observable<Tenant[]> {
@@ -29,6 +81,7 @@ export class TenantService {
       tap(res => {
         if (res && res.length > 0) {
           this.tenants.set(res);
+          this.detectCampusFromUrl();
         }
       })
     );
@@ -37,8 +90,13 @@ export class TenantService {
   selectTenant(tenant: Tenant) {
     this.currentTenant.set(tenant);
     localStorage.setItem('englishhive_tenant_id', tenant.id);
+
     // Dynamically inject CSS variables for White-Labeling
-    document.documentElement.style.setProperty('--primary-brand', tenant.primaryColor || '#10B981');
-    document.documentElement.style.setProperty('--primary-glow', `${tenant.primaryColor}38` || 'rgba(16, 185, 129, 0.22)');
+    if (typeof document !== 'undefined') {
+      const primary = tenant.primaryColor || '#002d62';
+      document.documentElement.style.setProperty('--primary-brand', primary);
+      document.documentElement.style.setProperty('--primary-glow', `${primary}2e`);
+      document.documentElement.style.setProperty('--primary-light', `${primary}14`);
+    }
   }
 }

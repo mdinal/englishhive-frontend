@@ -3,7 +3,7 @@
     <!-- Brand Logo & Tenant Name -->
     <a routerLink="/" class="brand-link">
       <div class="brand-badge">
-        <i class="fa-solid fa-graduation-cap"></i>
+        <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">school</span>
       </div>
       <div class="brand-text">
         <span class="brand-title">English<span class="brand-highlight">Hive</span></span>
@@ -19,34 +19,19 @@
       <a routerLink="/marketplace" routerLinkActive="active" class="nav-link">Marketplace & Books</a>
     </div>
 
-    <!-- Right Side: Tenant Switcher, Cart, Auth -->
+    <!-- Right Side: Automatic Campus Indicator, Cart, Auth -->
     <div class="nav-actions">
-      <!-- Institutional Tenant Switcher -->
-      <div class="tenant-switcher">
-        <button class="tenant-btn" (click)="toggleTenantDropdown()" title="Switch Partner Institution">
-          <i class="fa-solid fa-building-columns"></i>
-          <span class="tenant-label">{{ tenantService.currentTenant().subdomain | uppercase }}</span>
-          <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem;"></i>
-        </button>
-        <div class="tenant-dropdown" *ngIf="showTenantDropdown">
-          <div class="dropdown-header">Select Academy Campus</div>
-          <button 
-            *ngFor="let t of tenantService.tenants()" 
-            class="dropdown-item" 
-            [class.selected]="t.id === tenantService.currentTenant().id"
-            (click)="selectTenant(t)">
-            <div class="dot" [style.background-color]="t.primaryColor"></div>
-            <div class="info">
-              <div class="name">{{ t.name }}</div>
-              <div class="sub">{{ t.tagline }}</div>
-            </div>
-          </button>
+      <!-- Automatic URL-driven Campus Indicator Badge (No Manual Dropdown) -->
+      <div class="campus-indicator" [title]="'Campus resolved automatically from URL: ' + tenantService.currentTenant().name">
+        <span class="campus-dot" [style.background-color]="tenantService.currentTenant().primaryColor"></span>
+        <div class="campus-meta">
+          <span class="campus-code">{{ tenantService.currentTenant().subdomain | uppercase }} CAMPUS</span>
         </div>
       </div>
 
       <!-- Study Basket Cart Trigger -->
       <a routerLink="/marketplace" [queryParams]="{viewCart: 'true'}" class="cart-btn" title="View Study Basket">
-        <i class="fa-solid fa-bag-shopping"></i>
+        <span class="material-symbols-outlined">shopping_bag</span>
         <span class="cart-badge" *ngIf="marketplaceService.cartCount() > 0">{{ marketplaceService.cartCount() }}</span>
       </a>
 
@@ -61,7 +46,7 @@
             </span>
           </a>
           <button class="btn btn-ghost btn-sm" (click)="authService.logout()" title="Sign Out">
-            <i class="fa-solid fa-right-from-bracket"></i>
+            <span class="material-symbols-outlined text-sm">logout</span>
           </button>
         </div>
       </ng-container>
